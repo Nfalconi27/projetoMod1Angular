@@ -1,0 +1,50 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <!-- os atributos for e id no label e no input se relacionam entre si, permitindo que, ao clicar no label, o respectivo campo receba o foco.-->
+  <!-- o atributo formControlName do input é quem faz o realcionamento entre o campo e o formControl no arquivo .ts -->
+  <div class="form-group">
+    <label for="date-field">Data</label>
+    <input
+      type="date"
+      class="form-control"
+      id="date-field"
+      formControlName="date"
+    />
+  </div>
+  <div class="form-group">
+    <label for="description-field">Descrição</label>
+    <input
+      type="text"
+      class="form-control"
+      id="description-field"
+      placeholder="Descreva a transação"
+      formControlName="description"
+    />
+  </div>
+  <div class="form-group">
+    <label for="amount-field">Valor</label>
+    <input
+      type="number"
+      class="form-control"
+      id="amount-field"
+      formControlName="amount"
+    />
+  </div>
+  <div class="form-group">
+    <label for="type-field">Tipo de transação</label>
+    <select class="form-control" id="type-field" formControlName="type">
+      <option [value]="null" selected>- Selecione</option>
+      <option [value]="transactionTypesEnum.INCOME">Entrada</option>
+      <option [value]="transactionTypesEnum.EXPENSE">Saída</option>
+    </select>
+  </div>
+  <div class="mt-3">
+    <button type="submit" class="btn btn-primary me-2">Salvar</button>
+    <button
+      type="button"
+      class="btn btn-outline-primary"
+      (click)="backToList()"
+    >
+      Voltar
+    </button>
+  </div>
+</form>

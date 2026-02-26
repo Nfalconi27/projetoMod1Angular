@@ -1,0 +1,15 @@
+.sidebar {
+    height: calc(100vh - 64px);
+    background: #050505;
+    color: #fff;
+    padding: 48px 24px;
+}
+
+ul {
+    padding: 0;
+}
+
+ul > li {
+    list-style: none;
+    margin: 16px 0;
+}

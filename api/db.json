@@ -1,0 +1,46 @@
+{
+  "account": {
+    "id": 1,
+    "name": "Cliente Demo",
+    "balance": 5230.75
+  },
+  "transactions": [
+    {
+      "id": "1",
+      "date": "2026-02-01T10:00:00",
+      "description": "Salário",
+      "amount": 4500,
+      "type": "income"
+    },
+    {
+      "id": "2",
+      "date": "2026-02-02T14:32:00",
+      "description": "Supermercado",
+      "amount": -230.5,
+      "type": "expense"
+    },
+    {
+      "id": "3",
+      "date": "2026-02-03T20:10:00",
+      "description": "Netflix",
+      "amount": -39.9,
+      "type": "expense"
+    },
+    {
+      "id": "4",
+      "date": "2026-02-05T09:15:00",
+      "description": "Freelance",
+      "amount": 1000,
+      "type": "income"
+    },
+    {
+      "id": "40c3",
+      "date": "2026-02-19",
+      "description": "Descrição da transação",
+      "amount": -1500.85,
+      "type": "expense"
+    }
+  ],
+  "transfers": [],
+  "loans": []
+}

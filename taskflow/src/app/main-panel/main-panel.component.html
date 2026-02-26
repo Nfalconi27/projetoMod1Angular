@@ -1,0 +1,8 @@
+@switch (page$ | async) {
+  @case (pagesEnum.DASHBOARD) {
+    <app-dashboard></app-dashboard>
+  }
+  @case (pagesEnum.TRANSACTIONS) {
+    <app-transactions></app-transactions>
+  }
+}
