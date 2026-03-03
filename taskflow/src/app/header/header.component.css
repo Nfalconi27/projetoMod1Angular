@@ -1,9 +1,10 @@
 .header {
     height: 64px;
-    background: #050505;
+    background: #fff;
     color: #fff;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 24px;
+    background: linear-gradient(to right, rgb(255, 255, 255), rgb(18, 189, 185));
 }

@@ -4,10 +4,12 @@ import { RouterService } from '../core/services/router.service';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { TransactionsComponent } from './pages/transactions/transactions.component';
 import { AsyncPipe } from '@angular/common';
+import { LoanComponent } from "./pages/loan/loan.component";
+import { TransferComponent } from "./pages/transfer/transfer.component";
 
 @Component({
   selector: 'app-main-panel',
-  imports: [DashboardComponent, TransactionsComponent, AsyncPipe],
+  imports: [DashboardComponent, TransactionsComponent, AsyncPipe, LoanComponent, TransferComponent],
   templateUrl: './main-panel.component.html',
   styleUrl: './main-panel.component.css',
 })

@@ -1,29 +1,34 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { first } from 'rxjs';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { first, map, switchMap } from 'rxjs';
 import { TransactionTypes } from '../../constants/transaction-types.enum';
 import { TransactionsService } from '../../services/transactions.service';
 import { Transaction } from '../../models/transaction.model';
 import { TransactionPagesEnum } from '../../constants/transaction-pages.enum';
 import { RouterService } from '../../../../../core/services/router.service';
+import { MatCardModule } from "@angular/material/card";
+import { DashboardService } from '../../../dashboard/services/dashboard.service';
+import { CurrencyPipe, AsyncPipe } from '@angular/common';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-create-transaction',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MatCardModule, AsyncPipe, CurrencyPipe],
   templateUrl: './create-transaction.component.html',
   styleUrl: './create-transaction.component.css',
 })
 export class CreateTransactionComponent implements OnInit {
   private readonly transactionsService = inject(TransactionsService);
   private readonly routerService = inject(RouterService);
+  private readonly dashboardService = inject(DashboardService);
 
   @Input() id?: string;
 
   form!: FormGroup;
   transactionTypesEnum = TransactionTypes;
-  // today = new Date().toISOString().substring(0, 10);
   todayLocale = new Date().toLocaleDateString().split('/');
   todayISO = `${this.todayLocale[2]}-${this.todayLocale[1]}-${this.todayLocale[0]}`;
+  account$ = this.dashboardService.account$;
 
   ngOnInit(): void {
     this.buildForm();
@@ -36,9 +41,9 @@ export class CreateTransactionComponent implements OnInit {
   buildForm(): void {
     this.form = new FormGroup({
       date: new FormControl(this.todayISO),
-      description: new FormControl(),
-      amount: new FormControl(),
-      type: new FormControl(),
+      description: new FormControl(null,[Validators.required, Validators.minLength(5), Validators.maxLength(100)]),
+      amount: new FormControl(null,Validators.required),
+      type: new FormControl(null,Validators.required),
     });
   }
 
@@ -60,13 +65,42 @@ export class CreateTransactionComponent implements OnInit {
     const payload: Transaction = this.form.getRawValue();
     payload.amount =
       (payload.type === TransactionTypes.EXPENSE ? -1 : 1) * payload.amount;
-
+    
     if (this.id) {
-      this.updateTransaction(payload);
-      return;
-    }
-
-    this.saveTransaction(payload);
+      this.account$
+      .pipe(
+        take(1),
+        switchMap(account =>
+          this.transactionsService.getTransactionById(this.id!).pipe(
+            take(1),
+            map(transaction => ({
+              account,
+              transaction
+            }))
+          )
+        )
+      )
+      .subscribe(({ account, transaction }) => {
+        let novoSaldo = +account!.balance - +transaction.amount;        
+        this.updateTransaction(payload)
+        novoSaldo += +payload.amount;        
+        this.updateBalance(novoSaldo);
+      });        
+      
+    } else {
+      this.account$
+      .pipe(take(1))
+      .subscribe(account => {
+        const novoSaldo = +account!.balance + +payload.amount;
+        if (novoSaldo<0) {
+          alert('Saldo insuficiente!');
+          return;
+        }      
+        this.saveTransaction(payload)
+        this.updateBalance(novoSaldo);
+        this.backToList()
+      });
+    }  
   }
 
   saveTransaction(payload: Transaction): void {
@@ -91,6 +125,21 @@ export class CreateTransactionComponent implements OnInit {
       .subscribe({
         next: () => {
           console.log('Sucesso!');
+          this.backToList();
+        },
+        error: (err) => {
+          console.log(err);
+        },
+      });
+  }
+
+  updateBalance(balance: number): void {
+    this.dashboardService
+    .updateBalance(balance)
+    .pipe(first())
+      .subscribe({
+        next: () => {
+          console.log('Saldo Atualizado!');  
           this.backToList();
         },
         error: (err) => {

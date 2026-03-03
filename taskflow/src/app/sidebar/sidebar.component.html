@@ -1,7 +1,11 @@
-<aside class="sidebar">
+<aside class="sidebar ps-0 pe-1 pb-0">
   <ul>
     @for (item of menuItems; track $index) {
-      <li (click)="redirectToPage(item.page)">{{ item.label }}</li>
+      <li (click)="redirectToPage(item.page)">
+        <button mat-raised-button class="btn-sidebar">
+          {{ item.label }}
+        </button>
+      </li>
     }
   </ul>
 </aside>

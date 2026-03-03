@@ -1,3 +1,4 @@
+
 /* You can add global styles to this file, and also import other style files */
 body, * {
     margin: 0;
@@ -6,3 +7,16 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
+:root {
+  --primary-color: rgb(26, 54, 139);   /* Seu Azul NF */
+  --secondary-color: rgb(18, 189, 185); /* Seu Ciano NF */
+}
+
+/* Cores de marca NF */
+.bg-nf-primary { background-color: rgb(26, 54, 139) !important; }
+.text-nf-primary { color: rgb(26, 54, 139) !important; }
+.border-nf-primary { border-color: rgb(26, 54, 139) !important; }
+
+.bg-nf-secondary { background-color: rgb(18, 189, 185) !important; }
+.text-nf-secondary { color: rgb(18, 189, 185) !important; }
+.border-nf-secondary { border-color: rgb(18, 189, 185) !important; }

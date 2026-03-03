@@ -1,1 +1,54 @@
-<p>loan works!</p>
+<div class="p-3">
+  <form [formGroup]="formCred" (ngSubmit)="onSubmit()">
+    <!-- os atributos for e id no label e no input se relacionam entre si, permitindo que, ao clicar no label, o respectivo campo receba o foco.-->
+    <!-- o atributo formControlName do input é quem faz o realcionamento entre o campo e o formControl no arquivo .ts -->
+  
+    <mat-card class="text-nf-primary" appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>Simulação de Crédito</mat-card-title>
+        @if (account$ | async; as account) {
+        <mat-card-subtitle  class="text-nf-primary">
+          <p>Saldo Atual: <strong> {{ account.balance | currency:'BRL' }}</strong></p>        
+        </mat-card-subtitle>
+        }
+      </mat-card-header>
+      <mat-card-content>
+        <div class="form-group">
+          <label for="date-field">Valor Desejado:</label>
+          <input
+            type="number"
+            class="form-control"
+            id="amount-field"
+            formControlName="amount"
+            placeholder="Digite o valor do crédito"
+          />
+        </div>
+        <div class="form-group">
+          <label for="description-field">Parcelas:</label>
+          <input
+            type="select"
+            class="form-control"
+            id="parcelas-field"
+            placeholder="Digite o número de parcelas"
+            formControlName="parcelas"
+          />
+        </div>
+        <div class="form-group mt-3">
+          <label for="simulation-field">Simulação (Taxa de juros: 8,55/mês):</label>
+          <div>
+            <label>Valor da Parcela</label>
+            <input type="text" formControlName="valorParcela" readonly>
+          </div>
+          <div>
+            <label>Valor Total Pago</label>
+            <input type="text" formControlName="valorTotal" readonly>
+          </div>
+        </div>
+        <div class="mt-3">
+          <button type="submit" class="btn btn-primary me-2">Contratar</button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </form>
+
+</div>

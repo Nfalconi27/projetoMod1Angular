@@ -1,11 +1,67 @@
 <div class="p-3">
-  <mat-card class="example-card" appearance="outlined">
+  <mat-card class="text-nf-primary" appearance="outlined">
     <mat-card-header>
-      <mat-card-title>Conta bancária</mat-card-title>
+      <mat-card-title>Visão Geral</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <p>Cliente: {{ account?.name }}</p>
-      <p>Saldo atual: {{ account?.balance }}</p>
+      <p>Cliente: <span class="h4"> {{ account?.name }}</span> ------- Conta: <span class="h4"> {{ account?.id }}</span></p>
+      <div class="container ">
+        <div class="row text-center">
+          <div class="col">
+            <mat-card appearance="outlined">
+              <mat-card-content>
+                <p class="h3"> Saldo atual</p>
+              </mat-card-content>
+              <p>{{ account?.balance  | currency:'BRL'}}</p>
+            </mat-card>            
+          </div>
+          <div class="col">
+            <mat-card appearance="outlined">
+              <mat-card-content>
+                <p class="h3"> Receitas (mês)</p>
+              </mat-card-content>
+              <p>{{totalEntradasMes | currency:'BRL'}}</p>
+            </mat-card>      
+          </div>
+          <div class="col">
+            <mat-card appearance="outlined">
+              <mat-card-content>
+                <p class="h3"> Despesas (mês)</p>
+              </mat-card-content>
+              <p>{{totalDespesasMes | currency:'BRL'}}</p>
+            </mat-card>      
+          </div>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <mat-card-title>Últimas Transações</mat-card-title>
+        <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Data</th>
+            <th scope="col">Descrição</th>
+            <th scope="col">Valor</th>
+            <th scope="col">Tipo</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of ultimasTransacoes; track $index) {
+            <tr>
+              <td>{{ item.date | date: "dd/MM/yyyy" }}</td>
+              <td>{{ item.description }}</td>
+              <td [class]="item.amount | negativeValues">
+                {{ item.amount | currency: "BRL" : "symbol" : "1.2-2" : "pt-BR" }}
+              </td>
+              <td>
+                {{
+                  item.type === "income" ? "Entrada" : "Saída"
+                }}
+              </td>              
+            </tr>
+          }
+        </tbody>
+      </table>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>

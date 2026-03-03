@@ -2,10 +2,13 @@ import { Component, inject } from '@angular/core';
 import { Pages } from '../constants/pages.enum';
 import { RouterService } from '../core/services/router.service';
 import { MenuItem } from '../models/menu-item.model';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [],
+  imports: [MatButtonModule, MatDividerModule, MatIconModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
 })
@@ -23,6 +26,18 @@ export class SidebarComponent {
       label: 'Extrato',
       icon: '',
       page: Pages.TRANSACTIONS,
+      selected: false,
+    },
+    {
+      label: 'Transferência',
+      icon: '',
+      page: Pages.TRANSFER,
+      selected: false,
+    },
+    {
+      label: 'Crédito',
+      icon: '',
+      page: Pages.LOAN,
       selected: false,
     },
   ];
