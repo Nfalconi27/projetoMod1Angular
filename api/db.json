@@ -1,46 +1,79 @@
 {
   "account": {
-    "id": 1,
-    "name": "Cliente Demo",
-    "balance": 5230.75
+    "id": "1111-6",
+    "name": "Mariana",
+    "balance": 11850
   },
   "transactions": [
     {
-      "id": "1",
-      "date": "2026-02-01T10:00:00",
-      "description": "Salário",
-      "amount": 4500,
+      "id": "03a9",
+      "date": "2026-03-03",
+      "description": "teste",
+      "amount": 100,
       "type": "income"
     },
     {
-      "id": "2",
-      "date": "2026-02-02T14:32:00",
-      "description": "Supermercado",
-      "amount": -230.5,
-      "type": "expense"
-    },
-    {
-      "id": "3",
-      "date": "2026-02-03T20:10:00",
-      "description": "Netflix",
-      "amount": -39.9,
-      "type": "expense"
-    },
-    {
-      "id": "4",
-      "date": "2026-02-05T09:15:00",
-      "description": "Freelance",
+      "id": "a76e",
+      "date": "2026-02-17",
+      "description": "teste2",
       "amount": 1000,
       "type": "income"
     },
     {
-      "id": "40c3",
-      "date": "2026-02-19",
-      "description": "Descrição da transação",
-      "amount": -1500.85,
+      "id": "c00f",
+      "date": "2026-03-03",
+      "description": "teste3",
+      "amount": -100,
       "type": "expense"
+    },
+    {
+      "id": "675f",
+      "date": "2026-02-11",
+      "description": "teste4",
+      "amount": -150,
+      "type": "expense"
+    },
+    {
+      "id": "8732",
+      "date": "2026-03-03",
+      "description": "teste6",
+      "amount": 2000,
+      "type": "income"
+    },
+    {
+      "id": "c290",
+      "date": "2026-03-03",
+      "description": "transf plano",
+      "amount": -1000,
+      "type": "expense"
+    },
+    {
+      "id": "e8ea",
+      "date": "2026-03-03",
+      "amount": 10000,
+      "description": "Crédito Empréstimo",
+      "valorParcela": "1365.01",
+      "valorTotal": "16380.10",
+      "type": "income"
     }
   ],
-  "transfers": [],
-  "loans": []
+  "transfers": [
+    {
+      "id": "0ac8",
+      "date": "2026-03-03",
+      "description": "transf plano",
+      "amount": 1000,
+      "destAccount": "123456"
+    }
+  ],
+  "loans": [
+    {
+      "id": "afb5",
+      "date": "2026-03-03",
+      "amount": 10000,
+      "description": "Crédito Empréstimo",
+      "parcelas": "12",
+      "type": "income"
+    }
+  ]
 }

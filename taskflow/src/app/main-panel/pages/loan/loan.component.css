@@ -1,0 +1,32 @@
+.simulation-card {
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  width: 30vw;
+}
+
+.simulation-header {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.simulation-header .taxa {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.simulation-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.simulation-item strong {
+  font-size: 18px;
+}

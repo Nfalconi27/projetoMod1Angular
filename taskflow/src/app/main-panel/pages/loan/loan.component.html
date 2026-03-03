@@ -33,15 +33,20 @@
             formControlName="parcelas"
           />
         </div>
-        <div class="form-group mt-3">
-          <label for="simulation-field">Simulação (Taxa de juros: 8,55/mês):</label>
-          <div>
-            <label>Valor da Parcela</label>
-            <input type="text" formControlName="valorParcela" readonly>
+        <div class="simulation-card mt-4">
+          <div class="simulation-header">
+            Simulação
+            <span class="taxa">Taxa: 8,55% ao mês</span>
           </div>
-          <div>
-            <label>Valor Total Pago</label>
-            <input type="text" formControlName="valorTotal" readonly>
+
+          <div class="simulation-item">
+            <span>Valor da Parcela</span>
+            <strong>{{ formCred.get('valorParcela')?.value | currency:'BRL' }}</strong>
+          </div>
+
+          <div class="simulation-item">
+            <span>Total Pago</span>
+            <strong>{{ formCred.get('valorTotal')?.value | currency:'BRL' }}</strong>
           </div>
         </div>
         <div class="mt-3">
