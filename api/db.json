@@ -2,7 +2,7 @@
   "account": {
     "id": "1111-6",
     "name": "Mariana",
-    "balance": 11850
+    "balance": 9340
   },
   "transactions": [
     {
@@ -55,6 +55,13 @@
       "valorParcela": "1365.01",
       "valorTotal": "16380.10",
       "type": "income"
+    },
+    {
+      "id": "5503",
+      "date": "2026-03-03",
+      "description": "teste10",
+      "amount": -2510,
+      "type": "expense"
     }
   ],
   "transfers": [
