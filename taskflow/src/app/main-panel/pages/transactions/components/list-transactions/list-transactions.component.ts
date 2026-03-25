@@ -1,14 +1,13 @@
 import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
-import { first, Observable, take } from 'rxjs';
+import { first, take } from 'rxjs';
 import { Transaction } from '../../models/transaction.model';
 import { TransactionsService } from '../../services/transactions.service';
 import { CurrencyPipe, DatePipe, AsyncPipe } from '@angular/common';
 import { TransactionTypes } from '../../constants/transaction-types.enum';
 import { NegativeValuesPipe } from '../../../../../shared/pipes/negative-values.pipe';
-import { RouterService } from '../../../../../core/services/router.service';
-import { TransactionPagesEnum } from '../../constants/transaction-pages.enum';
 import { MatCardTitle, MatCardHeader, MatCardModule } from "@angular/material/card";
 import { DashboardService } from '../../../dashboard/services/dashboard.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list-transactions',
@@ -18,8 +17,8 @@ import { DashboardService } from '../../../dashboard/services/dashboard.service'
 })
 export class ListTransactionsComponent implements OnInit {
   private readonly transactionsService = inject(TransactionsService);
-  private readonly routerService = inject(RouterService);
   private readonly dashboardService = inject(DashboardService);  
+  private readonly router = inject(Router);
 
   
   @Output() editEmitter = new EventEmitter<string>();
@@ -55,11 +54,13 @@ export class ListTransactionsComponent implements OnInit {
   }
 
   redirectToCreate(): void {
-    this.routerService.setTransactionPage(TransactionPagesEnum.CREATE);
+    this.router.navigate(['/transacoes/criar']);
   }
 
   onEdit(id: string): void {
-    this.editEmitter.emit(id);
+    console.log('ID: ', id);
+    
+    this.router.navigate([`/transacoes/editar/${id}`]);
   }
 
   onDelete(id: string, amount:number): void {

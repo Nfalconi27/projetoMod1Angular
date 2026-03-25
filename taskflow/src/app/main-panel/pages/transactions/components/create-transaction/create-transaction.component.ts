@@ -1,15 +1,13 @@
+import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { first, map, switchMap } from 'rxjs';
-import { TransactionTypes } from '../../constants/transaction-types.enum';
-import { TransactionsService } from '../../services/transactions.service';
-import { Transaction } from '../../models/transaction.model';
-import { TransactionPagesEnum } from '../../constants/transaction-pages.enum';
-import { RouterService } from '../../../../../core/services/router.service';
 import { MatCardModule } from "@angular/material/card";
+import { first, map, switchMap, take } from 'rxjs';
 import { DashboardService } from '../../../dashboard/services/dashboard.service';
-import { CurrencyPipe, AsyncPipe } from '@angular/common';
-import { take } from 'rxjs';
+import { TransactionTypes } from '../../constants/transaction-types.enum';
+import { Transaction } from '../../models/transaction.model';
+import { TransactionsService } from '../../services/transactions.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-transaction',
@@ -19,8 +17,9 @@ import { take } from 'rxjs';
 })
 export class CreateTransactionComponent implements OnInit {
   private readonly transactionsService = inject(TransactionsService);
-  private readonly routerService = inject(RouterService);
   private readonly dashboardService = inject(DashboardService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   @Input() id?: string;
 
@@ -32,6 +31,7 @@ export class CreateTransactionComponent implements OnInit {
 
   ngOnInit(): void {
     this.buildForm();
+    this.id = this.route.snapshot.paramMap.get('id') ?? undefined;
 
     if (this.id) {
       this.getTransactionById();
@@ -149,6 +149,6 @@ export class CreateTransactionComponent implements OnInit {
   }
 
   backToList(): void {
-    this.routerService.setTransactionPage(TransactionPagesEnum.LIST);
+    this.router.navigate(['/transacoes']);
   }
 }

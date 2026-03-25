@@ -2,7 +2,6 @@ import { Component, inject, Input, OnInit } from '@angular/core';
 import { MatCardModule } from "@angular/material/card";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { first, take } from 'rxjs';
-import { RouterService } from '../../../core/services/router.service';
 import { TransactionTypes } from '../transactions/constants/transaction-types.enum';
 import { Transaction } from '../transactions/models/transaction.model';
 import { TransactionsService } from '../transactions/services/transactions.service';

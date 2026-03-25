@@ -25,3 +25,17 @@ ul > li {
     
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
+li:hover {
+  opacity: 0.8;
+  transition: 0.2s;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
