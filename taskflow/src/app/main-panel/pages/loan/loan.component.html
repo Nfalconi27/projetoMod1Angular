@@ -1,59 +1,43 @@
 <div class="p-3">
-  <form [formGroup]="formCred" (ngSubmit)="onSubmit()">
-    <!-- os atributos for e id no label e no input se relacionam entre si, permitindo que, ao clicar no label, o respectivo campo receba o foco.-->
-    <!-- o atributo formControlName do input é quem faz o realcionamento entre o campo e o formControl no arquivo .ts -->
-  
-    <mat-card class="text-nf-primary" appearance="outlined">
-      <mat-card-header>
-        <mat-card-title>Simulação de Crédito</mat-card-title>
-        @if (account$ | async; as account) {
-        <mat-card-subtitle  class="text-nf-primary">
-          <p>Saldo Atual: <strong> {{ account.balance | currency:'BRL' }}</strong></p>        
+  <mat-card class="text-nf-primary" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Simulação de Crédito</mat-card-title>
+      @if (account$ | async; as account) {
+        <mat-card-subtitle class="text-nf-primary">
+          <p>
+            Saldo Atual:
+            <strong> {{ account.balance | currency: "BRL" }}</strong>
+          </p>
         </mat-card-subtitle>
-        }
-      </mat-card-header>
-      <mat-card-content>
-        <div class="form-group">
-          <label for="date-field">Valor Desejado:</label>
-          <input
-            type="number"
-            class="form-control"
-            id="amount-field"
-            formControlName="amount"
-            placeholder="Digite o valor do crédito"
-          />
-        </div>
-        <div class="form-group">
-          <label for="description-field">Parcelas:</label>
-          <input
-            type="select"
-            class="form-control"
-            id="parcelas-field"
-            placeholder="Digite o número de parcelas"
-            formControlName="parcelas"
-          />
-        </div>
-        <div class="simulation-card mt-4">
-          <div class="simulation-header">
-            Simulação
-            <span class="taxa">Taxa: 8,55% ao mês</span>
+      }
+    </mat-card-header>
+    <mat-card-content>
+      <div class="card-container-limite mb-3">
+        <mat-card>
+          <div class="fw-bold fs-2">Limite Disponível</div>
+          <div class="fs-3">{{ loanLimit() | currency: "BRL" }}</div>
+          <div class="fs-7">
+            Taxa de juros: {{ loanInterest() | number: "1.2-2" }}%/mês
           </div>
+        </mat-card>
+      </div>
+      <div class="card-container-limite mb-3">
+        <button mat-raised-button #botaoSimular class="">
+          Desejo fazer uma simulação!
+        </button>
+      </div>
 
-          <div class="simulation-item">
-            <span>Valor da Parcela</span>
-            <strong>{{ formCred.get('valorParcela')?.value | currency:'BRL' }}</strong>
-          </div>
-
-          <div class="simulation-item">
-            <span>Total Pago</span>
-            <strong>{{ formCred.get('valorTotal')?.value | currency:'BRL' }}</strong>
-          </div>
+      @defer (on interaction(botaoSimular)) {
+        <div class="card-container-simulacao mb-3">
+          <app-loan-simulator></app-loan-simulator>
         </div>
-        <div class="mt-3">
-          <button type="submit" class="btn btn-primary me-2">Contratar</button>
+      } @placeholder {
+        <div class="card-container-limite mb-3">
+          Clique no botão acima para carregar o simulador de empréstimo.
         </div>
-      </mat-card-content>
-    </mat-card>
-  </form>
+      }
+    </mat-card-content>
+  </mat-card>
 
+  
 </div>

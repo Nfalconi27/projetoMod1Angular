@@ -8,6 +8,8 @@ import { NegativeValuesPipe } from '../../../../../shared/pipes/negative-values.
 import { MatCardTitle, MatCardHeader, MatCardModule } from "@angular/material/card";
 import { DashboardService } from '../../../dashboard/services/dashboard.service';
 import { Router } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+
 
 @Component({
   selector: 'app-list-transactions',
@@ -16,42 +18,46 @@ import { Router } from '@angular/router';
   styleUrl: './list-transactions.component.css',
 })
 export class ListTransactionsComponent implements OnInit {
-  private readonly transactionsService = inject(TransactionsService);
+  // private readonly transactionsService = inject(TransactionsService);
   private readonly dashboardService = inject(DashboardService);  
   private readonly router = inject(Router);
+  private transactionsService = inject(TransactionsService);
 
   
   @Output() editEmitter = new EventEmitter<string>();
   
-  transactions: Transaction[] = [];
+  // transactions: Transaction[] = [];
+  transactions = toSignal(this.transactionsService.getTransactions(), { 
+    initialValue: [] as Transaction[]
+  });
   transactionTypesEnum = TransactionTypes;
   account$ = this.dashboardService.account$;
   
   ngOnInit(): void {
-    this.getTransactions();
+    this.transactions();
   }
 
-  getTransactions(): void {
-    this.transactionsService
-      .getTransactions()
-      .pipe(first())
-      .subscribe({
-        next: (res) => {
-          this.transactions = res;
-          this.transactions = this.transactions
-        .sort((a, b) => {
-          const dataA = new Date(a.date).getTime();
-          const dataB = new Date(b.date).getTime();
+  // getTransactions(): void {
+  //   this.transactionsService
+  //     .getTransactions()
+  //     .pipe(first())
+  //     .subscribe({
+  //       next: (res) => {
+  //         this.transactions = res;
+  //         this.transactions = this.transactions
+  //       .sort((a, b) => {
+  //         const dataA = new Date(a.date).getTime();
+  //         const dataB = new Date(b.date).getTime();
 
-          return dataB - dataA; // mais recente primeiro
-        })
+  //         return dataB - dataA; // mais recente primeiro
+  //       })
           
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      });
-  }
+  //       },
+  //       error: (err) => {
+  //         console.log(err);
+  //       },
+  //     });
+  // }
 
   redirectToCreate(): void {
     this.router.navigate(['/transacoes/criar']);
@@ -69,7 +75,7 @@ export class ListTransactionsComponent implements OnInit {
       .pipe(first())
       .subscribe({
         next: () => {
-          this.getTransactions();
+          this.transactions();
         },
         error: (err) => {
           console.log(err);

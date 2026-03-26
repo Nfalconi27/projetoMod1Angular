@@ -30,3 +30,22 @@
 .simulation-item strong {
   font-size: 18px;
 }
+
+.card-container-limite {
+  display: flex;
+  justify-content: center; 
+}
+
+.card-container-limite mat-card {
+  width: 30%;
+  text-align: center;
+}
+.card-container-simulacao {
+  display: flex;
+  justify-content: center; 
+}
+
+.card-container-simulacao mat-card {
+  width: 60%;
+  text-align: center;
+}

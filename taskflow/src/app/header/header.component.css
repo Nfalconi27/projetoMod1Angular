@@ -7,4 +7,8 @@
     align-items: center;
     padding: 0 24px;
     background: linear-gradient(to right, rgb(255, 255, 255), rgb(18, 189, 185));
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
 }

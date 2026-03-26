@@ -10,9 +10,16 @@
           <div class="col">
             <mat-card appearance="outlined">
               <mat-card-content>
-                <p class="h3"> Saldo atual</p>
+                <p class="h3"> Saldo Disponível</p>
               </mat-card-content>
-              <p>{{ account?.balance  | currency:'BRL'}}</p>
+              @if (isBalanceVisible()) {
+                <p>{{ account?.balance  | currency:'BRL'}}</p>
+              } @else {
+                R$ **************
+              }
+              <button mat-button (click)="toggleBalanceVisibility()">
+                <mat-icon>{{ isBalanceVisible() ? 'visibility' : 'visibility_off' }}</mat-icon>
+              </button>
             </mat-card>            
           </div>
           <div class="col">
@@ -63,5 +70,21 @@
       </table>
       </div>
     </mat-card-content>
+    @defer(on viewport) {
+      <mat-card-content>
+        <app-credit-card-invoice></app-credit-card-invoice>        
+      </mat-card-content>
+    }
+    @placeholder {
+      <button mat-raised-button #loadButton style="cursor: pointer;">
+        Abrir fatura do cartão de crédito
+        <mat-icon>arrow_downward</mat-icon>
+      </button>
+    }
+    @loading (minimum 2s) {
+      <div class="d-flex justify-content-center align-items-center" style="height: 100px;">
+        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+      </div>
+    }
   </mat-card>
 </div>

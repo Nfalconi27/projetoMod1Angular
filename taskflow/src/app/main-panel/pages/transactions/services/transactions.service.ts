@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Transaction } from '../models/transaction.model';
 
@@ -7,30 +7,27 @@ import { Transaction } from '../models/transaction.model';
   providedIn: 'root',
 })
 export class TransactionsService {
-  private readonly http = inject(HttpClient);
+  private apiUrl = 'http://localhost:3000/transactions';
 
-  apiUrl = 'http://localhost:3000';
+  constructor(private http: HttpClient) {}
 
   getTransactions(): Observable<Transaction[]> {
-    return this.http.get<Transaction[]>(`${this.apiUrl}/transactions`);
+    return this.http.get<Transaction[]>(`${this.apiUrl}`);
   }
 
   getTransactionById(id: string): Observable<Transaction> {
-    return this.http.get<Transaction>(`${this.apiUrl}/transactions/${id}`);
+    return this.http.get<Transaction>(`${this.apiUrl}/${id}`);
   }
 
   createTransaction(transaction: Transaction): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/transactions`, transaction);
+    return this.http.post<void>(`${this.apiUrl}`, transaction);
   }
 
   updateTransaction(transaction: Transaction, id: string): Observable<void> {
-    return this.http.put<void>(
-      `${this.apiUrl}/transactions/${id}`,
-      transaction,
-    );
+    return this.http.put<void>(`${this.apiUrl}/${id}`,transaction,);
   }
 
   deleteTransaction(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/transactions/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

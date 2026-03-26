@@ -52,7 +52,7 @@ export class CreateTransactionComponent implements OnInit {
       .getTransactionById(this.id!)
       .pipe(first())
       .subscribe({
-        next: (transaction) => {
+        next: (transaction: Transaction) => {
           this.form.patchValue(transaction);
         },
         error: (err) => {
