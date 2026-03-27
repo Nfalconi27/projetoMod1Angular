@@ -4,85 +4,99 @@
       <mat-card-title>Visão Geral</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <p>Cliente: <span class="h4"> {{ account?.name }}</span> ------- Conta: <span class="h4"> {{ account?.id }}</span></p>
-      <div class="container ">
+      @if (accountData()) {
+        <p>
+          Cliente: <span class="h4"> {{ accountData()?.name }}</span> ------- Conta:
+          <span class="h4"> {{ accountData()?.id }}</span>
+        </p>
+      } @else {
+        <p>Carregando informações da conta...</p>
+      }
+
+      <div class="container">
         <div class="row text-center">
           <div class="col">
             <mat-card appearance="outlined">
-              <mat-card-content>
-                <p class="h3"> Saldo Disponível</p>
+              <mat-card-content class="p-0">
+                <p class="h3">Saldo Disponível</p>
+                <div class="balance-row">
+                  <button mat-icon-button (click)="toggleBalanceVisibility()">
+                    <mat-icon class="small-icon text-nf-secondary">
+                      {{ isBalanceVisible() ? "visibility" : "visibility_off" }}
+                    </mat-icon>
+                  </button>
+
+                  @if (isBalanceVisible()) {
+                    <p>{{ accountData()?.balance | currency: "BRL" }}</p>
+                  } @else {
+                    <p>R$ **************</p>
+                  }
+                </div>
               </mat-card-content>
-              @if (isBalanceVisible()) {
-                <p>{{ account?.balance  | currency:'BRL'}}</p>
-              } @else {
-                R$ **************
-              }
-              <button mat-button (click)="toggleBalanceVisibility()">
-                <mat-icon>{{ isBalanceVisible() ? 'visibility' : 'visibility_off' }}</mat-icon>
-              </button>
-            </mat-card>            
+            </mat-card>
           </div>
           <div class="col">
             <mat-card appearance="outlined">
               <mat-card-content>
-                <p class="h3"> Receitas (mês)</p>
+                <p class="h3">Receitas (mês)</p>
               </mat-card-content>
-              <p>{{totalEntradasMes | currency:'BRL'}}</p>
-            </mat-card>      
+              <p>{{ totalEntradasMes | currency: "BRL" }}</p>
+            </mat-card>
           </div>
           <div class="col">
             <mat-card appearance="outlined">
               <mat-card-content>
-                <p class="h3"> Despesas (mês)</p>
+                <p class="h3">Despesas (mês)</p>
               </mat-card-content>
-              <p>{{totalDespesasMes | currency:'BRL'}}</p>
-            </mat-card>      
+              <p>{{ totalDespesasMes | currency: "BRL" }}</p>
+            </mat-card>
           </div>
         </div>
       </div>
       <div class="row mt-4">
         <mat-card-title>Últimas Transações</mat-card-title>
         <table class="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col">Data</th>
-            <th scope="col">Descrição</th>
-            <th scope="col">Valor</th>
-            <th scope="col">Tipo</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (item of ultimasTransacoes; track $index) {
+          <thead>
             <tr>
-              <td>{{ item.date | date: "dd/MM/yyyy" }}</td>
-              <td>{{ item.description }}</td>
-              <td [class]="item.amount | negativeValues">
-                {{ item.amount | currency: "BRL" : "symbol" : "1.2-2" : "pt-BR" }}
-              </td>
-              <td>
-                {{
-                  item.type === "income" ? "Entrada" : "Saída"
-                }}
-              </td>              
+              <th scope="col">Data</th>
+              <th scope="col">Descrição</th>
+              <th scope="col">Valor</th>
+              <th scope="col">Tipo</th>
             </tr>
-          }
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            @for (item of ultimasTransacoes; track $index) {
+              <tr>
+                <td>{{ item.date | date: "dd/MM/yyyy" }}</td>
+                <td>{{ item.description }}</td>
+                <td [class]="item.amount | negativeValues">
+                  {{
+                    item.amount | currency: "BRL" : "symbol" : "1.2-2" : "pt-BR"
+                  }}
+                </td>
+                <td>
+                  {{ item.type === "income" ? "Entrada" : "Saída" }}
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
       </div>
     </mat-card-content>
-    @defer(on viewport) {
+    @defer (on viewport) {
       <mat-card-content>
-        <app-credit-card-invoice></app-credit-card-invoice>        
+        <app-credit-card-invoice></app-credit-card-invoice>
       </mat-card-content>
-    }
-    @placeholder {
-      <button mat-raised-button #loadButton style="cursor: pointer;">
+    } @placeholder {
+      <button mat-raised-button #loadButton style="cursor: pointer">
         Abrir fatura do cartão de crédito
         <mat-icon>arrow_downward</mat-icon>
       </button>
-    }
-    @loading (minimum 2s) {
-      <div class="d-flex justify-content-center align-items-center" style="height: 100px;">
+    } @loading (minimum 2s) {
+      <div
+        class="d-flex justify-content-center align-items-center"
+        style="height: 100px"
+      >
         <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
       </div>
     }

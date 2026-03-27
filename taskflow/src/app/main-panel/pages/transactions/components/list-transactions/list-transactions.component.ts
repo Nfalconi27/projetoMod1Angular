@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { first, take } from 'rxjs';
 import { Transaction } from '../../models/transaction.model';
 import { TransactionsService } from '../../services/transactions.service';
@@ -17,7 +17,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
   templateUrl: './list-transactions.component.html',
   styleUrl: './list-transactions.component.css',
 })
-export class ListTransactionsComponent implements OnInit {
+export class ListTransactionsComponent{
   // private readonly transactionsService = inject(TransactionsService);
   private readonly dashboardService = inject(DashboardService);  
   private readonly router = inject(Router);
@@ -32,32 +32,7 @@ export class ListTransactionsComponent implements OnInit {
   });
   transactionTypesEnum = TransactionTypes;
   account$ = this.dashboardService.account$;
-  
-  ngOnInit(): void {
-    this.transactions();
-  }
 
-  // getTransactions(): void {
-  //   this.transactionsService
-  //     .getTransactions()
-  //     .pipe(first())
-  //     .subscribe({
-  //       next: (res) => {
-  //         this.transactions = res;
-  //         this.transactions = this.transactions
-  //       .sort((a, b) => {
-  //         const dataA = new Date(a.date).getTime();
-  //         const dataB = new Date(b.date).getTime();
-
-  //         return dataB - dataA; // mais recente primeiro
-  //       })
-          
-  //       },
-  //       error: (err) => {
-  //         console.log(err);
-  //       },
-  //     });
-  // }
 
   redirectToCreate(): void {
     this.router.navigate(['/transacoes/criar']);

@@ -1,15 +1,16 @@
-import { Component, inject, OnInit, signal, effect } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
-import { Account } from './models/account.model';
-import { DashboardService } from './services/dashboard.service';
 import { CurrencyPipe, DatePipe } from '@angular/common';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { MatButton } from "@angular/material/button";
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from "@angular/material/icon";
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { NegativeValuesPipe } from '../../../shared/pipes/negative-values.pipe';
 import { Transaction } from '../transactions/models/transaction.model';
 import { TransactionsService } from '../transactions/services/transactions.service';
-import { NegativeValuesPipe } from '../../../shared/pipes/negative-values.pipe';
-import { MatIconModule } from "@angular/material/icon";
-import { MatButton } from "@angular/material/button";
 import { CreditCardInvoiceComponent } from "./components/credit-card-invoice/credit-card-invoice.component";
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { DashboardService } from './services/dashboard.service';
+import { Account } from './models/account.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,7 +23,7 @@ export class DashboardComponent implements OnInit {
   private readonly transactionService = inject(TransactionsService);
   // constructor(private transactionService: TransactionsService) {}
 
-  account?: Account;
+  // account?: Account;
   transactions: Transaction[] = [];
   totalEntradasMes = 0;
   totalDespesasMes = 0;
@@ -33,16 +34,11 @@ export class DashboardComponent implements OnInit {
     this.isBalanceVisible.update((visible) => !visible);
   } 
 
+  accountData = toSignal<Account | undefined>(this.dashboardService.getAccount(), {initialValue: undefined})
+  
+  
 
   ngOnInit(): void {
-    this.dashboardService.getAccount().subscribe({
-      next: (res: Account) => {
-        this.account = res;
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
     this.getLastTransactions();
   }
 

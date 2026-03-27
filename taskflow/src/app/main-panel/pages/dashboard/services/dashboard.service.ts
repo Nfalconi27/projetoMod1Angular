@@ -7,24 +7,20 @@ import { Account } from '../models/account.model';
   providedIn: 'root',
 })
 export class DashboardService {
-  private readonly http = inject(HttpClient);
-
-  apiUrl = 'http://localhost:3000';
+  apiUrl = 'http://localhost:3000/account';
+  constructor(private http: HttpClient) {}
 
   private accountSubject = new BehaviorSubject<Account | null>(null);
 
   account$ = this.accountSubject.asObservable();
 
   getAccount(): Observable<Account> {
-    return this.http.get<Account>(`${this.apiUrl}/account`)
-    .pipe(
-        tap(account => this.accountSubject.next(account))
-      );
+    return this.http.get<Account>(`${this.apiUrl}`)
   }
 
   updateBalance(newBalance: number): Observable<Account> {
     return this.http.patch<Account>(
-    `${this.apiUrl}/account/`,
+    `${this.apiUrl}`,
     { balance: newBalance }
   ).pipe(
     tap(updatedAccount => {

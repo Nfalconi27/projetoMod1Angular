@@ -2,15 +2,15 @@
   "account": {
     "id": "1111-6",
     "name": "Mariana",
-    "balance": 9340
+    "balance": 23800
   },
   "transactions": [
     {
-      "id": "03a9",
       "date": "2026-03-03",
       "description": "teste",
-      "amount": 100,
-      "type": "income"
+      "amount": 50,
+      "type": "income",
+      "id": "03a9"
     },
     {
       "id": "a76e",
@@ -41,13 +41,6 @@
       "type": "income"
     },
     {
-      "id": "c290",
-      "date": "2026-03-03",
-      "description": "transf plano",
-      "amount": -1000,
-      "type": "expense"
-    },
-    {
       "id": "e8ea",
       "date": "2026-03-03",
       "amount": 10000,
@@ -57,11 +50,50 @@
       "type": "income"
     },
     {
-      "id": "5503",
+      "id": "38aa",
       "date": "2026-03-03",
-      "description": "teste10",
-      "amount": -2510,
+      "description": "transf plano",
+      "amount": -10000,
       "type": "expense"
+    },
+    {
+      "id": "c740",
+      "date": "2026-03-03",
+      "amount": 10000,
+      "description": "Crédito Empréstimo",
+      "valorParcela": "1365.01",
+      "valorTotal": "16380.10",
+      "type": "income"
+    },
+    {
+      "id": "6e57",
+      "date": "2026-03-25",
+      "amount": 10000,
+      "description": "Crédito Empréstimo",
+      "valorParcela": "1527.47",
+      "valorTotal": "15274.74",
+      "type": "income"
+    },
+    {
+      "id": "299f",
+      "date": "2026-03-25",
+      "description": "teste",
+      "amount": -10000,
+      "type": "expense"
+    },
+    {
+      "id": "bdf6",
+      "date": "2026-03-25",
+      "description": "transf plano",
+      "amount": 10000,
+      "type": "income"
+    },
+    {
+      "id": "52b8",
+      "date": "2026-03-25",
+      "description": "teste",
+      "amount": 1000,
+      "type": "income"
     }
   ],
   "transfers": [
@@ -71,6 +103,34 @@
       "description": "transf plano",
       "amount": 1000,
       "destAccount": "123456"
+    },
+    {
+      "id": "d2e4",
+      "date": "2026-03-03",
+      "description": "transf plano",
+      "amount": 10000,
+      "destAccount": "123456"
+    },
+    {
+      "id": "c147",
+      "date": "2026-03-25",
+      "description": "teste",
+      "amount": 10000,
+      "destAccount": "123456"
+    },
+    {
+      "id": "1d83",
+      "date": null,
+      "description": "transf plano",
+      "amount": 2000,
+      "destAccount": "1234567"
+    },
+    {
+      "id": "275b",
+      "date": null,
+      "description": "farmácia",
+      "amount": 1000,
+      "destAccount": "20005"
     }
   ],
   "loans": [
@@ -80,6 +140,94 @@
       "amount": 10000,
       "description": "Crédito Empréstimo",
       "parcelas": "12",
+      "type": "income"
+    },
+    {
+      "id": "2679",
+      "date": "2026-03-03",
+      "amount": 10000,
+      "description": "Crédito Empréstimo",
+      "parcelas": "12",
+      "type": "income"
+    },
+    {
+      "id": "0f53",
+      "date": "2026-03-25",
+      "amount": null,
+      "description": "Crédito Empréstimo",
+      "parcelas": "1",
+      "type": "income"
+    },
+    {
+      "id": "eb04",
+      "date": null,
+      "amount": null,
+      "description": null,
+      "parcelas": null,
+      "type": null
+    },
+    {
+      "id": "598d",
+      "date": null,
+      "amount": null,
+      "description": null,
+      "parcelas": null,
+      "type": null
+    },
+    {
+      "id": "c326",
+      "date": null,
+      "amount": null,
+      "description": null,
+      "parcelas": null,
+      "type": null
+    },
+    {
+      "id": "efc3",
+      "date": "2026-03-25",
+      "amount": null,
+      "description": "Crédito Empréstimo",
+      "parcelas": "1",
+      "type": "income"
+    },
+    {
+      "id": "c50e",
+      "date": null,
+      "amount": null,
+      "description": null,
+      "parcelas": null,
+      "type": null
+    },
+    {
+      "id": "d1dd",
+      "date": null,
+      "amount": null,
+      "description": null,
+      "parcelas": null,
+      "type": null
+    },
+    {
+      "id": "dc83",
+      "date": "2026-03-25",
+      "amount": null,
+      "description": "Crédito Empréstimo",
+      "parcelas": "1",
+      "type": "income"
+    },
+    {
+      "id": "a9a6",
+      "date": null,
+      "amount": null,
+      "description": null,
+      "parcelas": null,
+      "type": null
+    },
+    {
+      "id": "2420",
+      "date": "2026-03-25",
+      "amount": 10000,
+      "description": "Crédito Empréstimo",
+      "parcelas": "10",
       "type": "income"
     }
   ]
