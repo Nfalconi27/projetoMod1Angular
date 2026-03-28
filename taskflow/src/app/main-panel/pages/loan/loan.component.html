@@ -2,7 +2,7 @@
   <mat-card class="text-nf-primary" appearance="outlined">
     <mat-card-header>
       <mat-card-title>Simulação de Crédito</mat-card-title>
-      @if (account$ | async; as account) {
+      @if (account$(); as account) {
         <mat-card-subtitle class="text-nf-primary">
           <p>
             Saldo Atual:

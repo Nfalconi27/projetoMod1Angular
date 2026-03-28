@@ -15,9 +15,11 @@ export class TransfersService {
     return this.http.get<Transfer[]>(`${this.apiUrl}/transfers`);
   }
 
-  createTransfer(transfer: Transfer): Observable<void> {
+  // createTransfer(transfer: Transfer): Observable<void> {
+  //   return this.http.post<void>(`${this.apiUrl}/transfers`, transfer);
+  // }
+
+  createTransfer(transfer: Omit<Transfer, 'id'>): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/transfers`, transfer);
   }
-
 }
-

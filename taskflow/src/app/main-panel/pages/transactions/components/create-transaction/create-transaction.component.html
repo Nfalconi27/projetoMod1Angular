@@ -1,11 +1,11 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<form [formGroup]="transactionForm" (ngSubmit)="onSubmit()">
   <!-- os atributos for e id no label e no input se relacionam entre si, permitindo que, ao clicar no label, o respectivo campo receba o foco.-->
   <!-- o atributo formControlName do input é quem faz o realcionamento entre o campo e o formControl no arquivo .ts -->
 
   <mat-card class="text-nf-primary" appearance="outlined">
     <mat-card-header>
       <mat-card-title>Transação</mat-card-title>
-      @if (account$ | async; as account) {
+      @if (account$(); as account) {
       <mat-card-subtitle  class="text-nf-primary">
         <p>Saldo Atual: <strong> {{ account.balance | currency:'BRL' }}</strong></p>        
       </mat-card-subtitle>
@@ -54,7 +54,7 @@
       <div class="mt-3">
         <button type="submit" 
         class="btn btn-primary me-2"
-        [disabled]="form.invalid">
+        [disabled]="transactionForm.invalid">
           Salvar
         </button>
         <button

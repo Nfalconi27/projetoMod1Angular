@@ -40,7 +40,7 @@
               <mat-card-content>
                 <p class="h3">Receitas (mês)</p>
               </mat-card-content>
-              <p>{{ totalEntradasMes | currency: "BRL" }}</p>
+              <p>{{ totalEntradasMes() | currency: "BRL" }}</p>
             </mat-card>
           </div>
           <div class="col">
@@ -48,7 +48,7 @@
               <mat-card-content>
                 <p class="h3">Despesas (mês)</p>
               </mat-card-content>
-              <p>{{ totalDespesasMes | currency: "BRL" }}</p>
+              <p>{{ totalDespesasMes() | currency: "BRL" }}</p>
             </mat-card>
           </div>
         </div>
@@ -65,7 +65,7 @@
             </tr>
           </thead>
           <tbody>
-            @for (item of ultimasTransacoes; track $index) {
+            @for (item of ultimasTransacoes(); track $index) {
               <tr>
                 <td>{{ item.date | date: "dd/MM/yyyy" }}</td>
                 <td>{{ item.description }}</td>

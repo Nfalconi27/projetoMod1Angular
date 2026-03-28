@@ -2,7 +2,7 @@
   <mat-card class="text-nf-primary" appearance="outlined">
     <mat-card-header>
       <mat-card-title>Extrato</mat-card-title>
-      @if (account$ | async; as account) {
+      @if (account$(); as account) {
             <mat-card-subtitle >
               <p class="text-nf-primary">Saldo Atual: <strong> {{ account.balance | currency:'BRL' }}</strong></p>        
             </mat-card-subtitle>
@@ -51,7 +51,7 @@
         </tbody>
       </table>
       
-      <button class="btn btn-primary" (click)="redirectToCreate()">
+      <button class="btn btn-primary" (click)="openCreateTransactionDialog()">
         Adicionar Transação
       </button>
     </mat-card-content>

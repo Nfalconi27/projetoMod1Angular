@@ -1,89 +1,92 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { MatButton } from "@angular/material/button";
+import { MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatIconModule } from "@angular/material/icon";
+import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NegativeValuesPipe } from '../../../shared/pipes/negative-values.pipe';
 import { Transaction } from '../transactions/models/transaction.model';
 import { TransactionsService } from '../transactions/services/transactions.service';
-import { CreditCardInvoiceComponent } from "./components/credit-card-invoice/credit-card-invoice.component";
+import { CreditCardInvoiceComponent } from './components/credit-card-invoice/credit-card-invoice.component';
 import { DashboardService } from './services/dashboard.service';
 import { Account } from './models/account.model';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [MatCardModule, NegativeValuesPipe, CurrencyPipe, DatePipe, MatIconModule, MatButton, CreditCardInvoiceComponent, MatProgressSpinnerModule],
+  imports: [
+    MatCardModule,
+    NegativeValuesPipe,
+    CurrencyPipe,
+    DatePipe,
+    MatIconModule,
+    MatButton,
+    CreditCardInvoiceComponent,
+    MatProgressSpinnerModule,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
   private readonly dashboardService = inject(DashboardService);
   private readonly transactionService = inject(TransactionsService);
-  // constructor(private transactionService: TransactionsService) {}
-
-  // account?: Account;
-  transactions: Transaction[] = [];
-  totalEntradasMes = 0;
-  totalDespesasMes = 0;
-  ultimasTransacoes: Transaction[] = [];
 
   isBalanceVisible = signal(false);
   toggleBalanceVisibility() {
     this.isBalanceVisible.update((visible) => !visible);
-  } 
-
-  accountData = toSignal<Account | undefined>(this.dashboardService.getAccount(), {initialValue: undefined})
-  
-  
-
-  ngOnInit(): void {
-    this.getLastTransactions();
   }
 
-  getLastTransactions() {
+  // accountData = toSignal<Account | undefined>(
+  //   this.dashboardService.getAccount(),
+  //   { initialValue: undefined },
+  // );
+  accountData = this.dashboardService.account;
+
+
+  transactions = toSignal(this.transactionService.getTransactions(), { 
+    initialValue: [] as Transaction[]
+  });
+
+  receitas = computed(() => {
     const hoje = new Date();
+    const mes = hoje.getMonth();
+    const ano = hoje.getFullYear();
 
-    this.transactionService.getTransactions().subscribe((res) => {
-      this.transactions = res;
-
-      const receitas = this.transactions.filter((t) => {
-        const dataT = new Date(t.date);
-        return (
-          t.type === 'income' &&
-          dataT.getMonth() === hoje.getMonth() &&
-          dataT.getFullYear() === hoje.getFullYear()
-        );
-      });
-
-      this.totalEntradasMes = receitas.reduce(
-        (total, t) => +total + +t.amount,
-        0,
-      );
-
-      const despesas = this.transactions.filter((t) => {
-        const dataT = new Date(t.date);
-        return (
-          t.type === 'expense' &&
-          dataT.getMonth() === hoje.getMonth() &&
-          dataT.getFullYear() === hoje.getFullYear()
-        );
-      });
-
-      this.totalDespesasMes = despesas.reduce(
-        (total, t) => +total + +t.amount,
-        0,
-      );
-
-      this.ultimasTransacoes = this.transactions
-        .sort((a, b) => {
-          const dataA = new Date(a.date).getTime();
-          const dataB = new Date(b.date).getTime();
-
-          return dataB - dataA; // mais recente primeiro
-        })
-        .slice(0, 8);
+    return this.transactions().filter(t => {
+      const d = new Date(t.date);
+      return t.type === 'income' &&
+            d.getMonth() === mes &&
+            d.getFullYear() === ano;
     });
-  }
+  });
+  totalEntradasMes = computed(() =>
+    this.receitas().reduce((total, t) => total + +t.amount, 0)
+  );
+
+  despesas = computed(() => {
+    const hoje = new Date();
+    const mes = hoje.getMonth();
+    const ano = hoje.getFullYear();
+
+    return this.transactions().filter(t => {
+      const d = new Date(t.date);
+      return t.type === 'expense' &&
+            d.getMonth() === mes &&
+            d.getFullYear() === ano;
+    });
+  });
+
+  totalDespesasMes = computed(() =>
+    this.despesas().reduce((total, t) => total + +t.amount, 0)
+  );
+
+  ultimasTransacoes = computed(() =>
+    [...this.transactions()]
+      .sort((a, b) =>
+        new Date(b.date).getTime() - new Date(a.date).getTime()
+      )
+      .slice(0, 16)
+  );
+
+  // }
 }

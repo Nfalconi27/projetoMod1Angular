@@ -1,154 +1,105 @@
 import { AsyncPipe, CurrencyPipe } from '@angular/common';
-import { Component, inject, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatCardModule } from "@angular/material/card";
-import { first, map, switchMap, take } from 'rxjs';
-import { DashboardService } from '../../../dashboard/services/dashboard.service';
+import { Component, inject, signal } from '@angular/core';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatDialogRef } from '@angular/material/dialog';
 import { TransactionTypes } from '../../constants/transaction-types.enum';
 import { Transaction } from '../../models/transaction.model';
 import { TransactionsService } from '../../services/transactions.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { DashboardService } from '../../../dashboard/services/dashboard.service';
+import { Account } from '../../../dashboard/models/account.model';
+import { Router } from '@angular/router';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-create-transaction',
-  imports: [ReactiveFormsModule, MatCardModule, AsyncPipe, CurrencyPipe],
+  imports: [ReactiveFormsModule, MatCardModule, CurrencyPipe],
   templateUrl: './create-transaction.component.html',
   styleUrl: './create-transaction.component.css',
 })
-export class CreateTransactionComponent implements OnInit {
+export class CreateTransactionComponent {
   private readonly transactionsService = inject(TransactionsService);
+  private readonly dialogRef = inject(MatDialogRef<CreateTransactionComponent>);
   private readonly dashboardService = inject(DashboardService);
   private readonly router = inject(Router);
-  private readonly route = inject(ActivatedRoute);
 
-  @Input() id?: string;
+  account$ = toSignal<Account | undefined>(this.dashboardService.getAccount(), {
+    initialValue: undefined,
+  });
 
-  form!: FormGroup;
+  transactionForm = new FormGroup({
+    date: new FormControl(new Date().toISOString().split('T')[0], {
+      validators: Validators.required,
+      nonNullable: true,
+    }),
+    description: new FormControl('', {
+      validators: [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(100),
+      ],
+      nonNullable: true,
+    }),
+    amount: new FormControl(0, {
+      validators: [Validators.required],
+      nonNullable: true,
+    }),
+    type: new FormControl<TransactionTypes | null>(null, {
+      validators: Validators.required,
+    }),
+  });
+
   transactionTypesEnum = TransactionTypes;
-  todayLocale = new Date().toLocaleDateString().split('/');
-  todayISO = `${this.todayLocale[2]}-${this.todayLocale[1]}-${this.todayLocale[0]}`;
-  account$ = this.dashboardService.account$;
+  isLoading = signal(false);
+  errorMessage = signal<string | null>(null);
 
-  ngOnInit(): void {
-    this.buildForm();
-    this.id = this.route.snapshot.paramMap.get('id') ?? undefined;
+  onSubmit() {
+    if (this.transactionForm.valid) {
+      this.isLoading.set(true);
+      this.errorMessage.set(null);
 
-    if (this.id) {
-      this.getTransactionById();
+      const formValue = this.transactionForm.getRawValue();
+      const payload: Omit<Transaction, 'id'> = {
+        ...formValue,
+        amount:
+          formValue.type === TransactionTypes.EXPENSE
+            ? -Math.abs(formValue.amount)
+            : Math.abs(formValue.amount),
+        type: formValue.type!,
+      };
+
+      const account = this.account$();
+      if (!account) return;
+
+      const novoSaldo = +account.balance + +payload.amount;
+
+      this.transactionsService
+        .createTransaction(payload)
+        .pipe(switchMap(() => this.dashboardService.updateBalance(novoSaldo)))
+        .subscribe({
+          next: () => {
+            alert('Transação feita com sucesso!');
+            this.transactionForm.reset();
+            this.dialogRef.close(true);
+          },
+          error: (err) => {
+            console.error(err);
+            this.errorMessage.set('Erro na operação');
+          },
+          complete: () => {
+            this.isLoading.set(false);
+          },
+        });
     }
   }
 
-  buildForm(): void {
-    this.form = new FormGroup({
-      date: new FormControl(this.todayISO),
-      description: new FormControl(null,[Validators.required, Validators.minLength(5), Validators.maxLength(100)]),
-      amount: new FormControl(null,Validators.required),
-      type: new FormControl(null,Validators.required),
-    });
-  }
-
-  getTransactionById(): void {
-    this.transactionsService
-      .getTransactionById(this.id!)
-      .pipe(first())
-      .subscribe({
-        next: (transaction: Transaction) => {
-          this.form.patchValue(transaction);
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      });
-  }
-
-  onSubmit(): void {
-    const payload: Transaction = this.form.getRawValue();
-    payload.amount =
-      (payload.type === TransactionTypes.EXPENSE ? -1 : 1) * payload.amount;
-    
-    if (this.id) {
-      this.account$
-      .pipe(
-        take(1),
-        switchMap(account =>
-          this.transactionsService.getTransactionById(this.id!).pipe(
-            take(1),
-            map(transaction => ({
-              account,
-              transaction
-            }))
-          )
-        )
-      )
-      .subscribe(({ account, transaction }) => {
-        let novoSaldo = +account!.balance - +transaction.amount;        
-        this.updateTransaction(payload)
-        novoSaldo += +payload.amount;        
-        this.updateBalance(novoSaldo);
-      });        
-      
-    } else {
-      this.account$
-      .pipe(take(1))
-      .subscribe(account => {
-        const novoSaldo = +account!.balance + +payload.amount;
-        if (novoSaldo<0) {
-          alert('Saldo insuficiente!');
-          return;
-        }      
-        this.saveTransaction(payload)
-        this.updateBalance(novoSaldo);
-        this.backToList()
-      });
-    }  
-  }
-
-  saveTransaction(payload: Transaction): void {
-    this.transactionsService
-      .createTransaction(payload)
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          console.log('Sucesso!');
-          this.backToList();
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      });
-  }
-
-  updateTransaction(payload: Transaction): void {
-    this.transactionsService
-      .updateTransaction(payload, this.id!)
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          console.log('Sucesso!');
-          this.backToList();
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      });
-  }
-
-  updateBalance(balance: number): void {
-    this.dashboardService
-    .updateBalance(balance)
-    .pipe(first())
-      .subscribe({
-        next: () => {
-          console.log('Saldo Atualizado!');  
-          this.backToList();
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      });
-  }
-
   backToList(): void {
-    this.router.navigate(['/transacoes']);
+    this.router.navigate(['/transacoes/listar']);
   }
 }
