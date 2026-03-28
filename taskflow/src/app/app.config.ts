@@ -5,6 +5,10 @@ import { provideRouter, withPreloading, PreloadAllModules } from '@angular/route
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { importProvidersFrom } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader'
+
 
 
 export const appConfig: ApplicationConfig = {
@@ -13,7 +17,9 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withPreloading(PreloadAllModules)),
     provideHttpClient(withInterceptors([authInterceptor])),
     provideAnimationsAsync(),
-    {provide: MAT_DATE_LOCALE, useValue: 'pt-BR' }
+    {provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
+    importProvidersFrom(TranslateModule.forRoot()),
+    ...provideTranslateHttpLoader({prefix: './i18n/', suffix: '.json'})
 
   ],
 };

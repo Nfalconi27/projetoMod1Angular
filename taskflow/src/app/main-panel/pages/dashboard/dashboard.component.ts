@@ -11,6 +11,7 @@ import { TransactionsService } from '../transactions/services/transactions.servi
 import { CreditCardInvoiceComponent } from './components/credit-card-invoice/credit-card-invoice.component';
 import { DashboardService } from './services/dashboard.service';
 import { Account } from './models/account.model';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,6 +24,7 @@ import { Account } from './models/account.model';
     MatButton,
     CreditCardInvoiceComponent,
     MatProgressSpinnerModule,
+    TranslatePipe
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',

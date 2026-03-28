@@ -4,6 +4,8 @@ import { MainPanelComponent } from './main-panel/main-panel.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { DashboardService } from './main-panel/pages/dashboard/services/dashboard.service';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslateService } from '@ngx-translate/core';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -17,11 +19,14 @@ export class AppComponent {
 
   account = toSignal(this.dashboardService.getAccount());
 
+  constructor(private translate: TranslateService) {
+    this.translate.addLangs(['pt-pt', 'pt-br']);
+    this.translate.setFallbackLang(environment.defaultLang);
+    this.translate.use(environment.defaultLang);
+  }
+
   ngOnInit() {
     this.dashboardService.loadAccount();
   }
 
-  // ngOnInit() {
-  //   this.dashboardService.getAccount().subscribe();
-  // }
 }

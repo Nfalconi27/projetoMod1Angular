@@ -1,0 +1,12 @@
+{
+    "SIDEBAR": {
+        "DASHBOARD": "Painel",
+        "TRANSFER": "Transferência",
+        "LOAN": "Empréstimos",
+        "TRANSACTIONS": "Transações",
+        "PROFILE": "Perfil"
+    },
+    "DASHBOARD": {
+        "BALANCE": "Saldo Disponível"
+    }
+}

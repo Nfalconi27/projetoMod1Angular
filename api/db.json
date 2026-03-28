@@ -2,7 +2,7 @@
   "account": {
     "id": 1111,
     "name": "Mariana",
-    "balance": 99900
+    "balance": 98399
   },
   "transactions": [
     {
@@ -20,6 +20,13 @@
       "description": "transf plano",
       "amount": 100,
       "type": "expense"
+    },
+    {
+      "id": "c905",
+      "date": "2026-03-28",
+      "description": "dasdsa",
+      "amount": 1501,
+      "type": "expense"
     }
   ],
   "transfers": [
@@ -29,6 +36,13 @@
       "description": "transf plano",
       "amount": 100,
       "destAccount": "03123"
+    },
+    {
+      "id": "83af",
+      "date": "2026-03-28",
+      "description": "dasdsa",
+      "amount": 1501,
+      "destAccount": "010581"
     }
   ],
   "loans": [

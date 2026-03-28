@@ -11,7 +11,7 @@ export class AuthService {
   constructor(private router: Router) { }
 
   login(email: string, password: string): boolean {
-    if (email === 'admin@banco.com' && password === 'admin123') {
+    if (email === 'mariana@nf.com' && password === 'mariana123') {
       const fakeJwt = 'KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30.falso-payload.falsa-assinatura';
       localStorage.setItem('token', fakeJwt);
       this.isAuthenticated.set(true);

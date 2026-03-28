@@ -1,0 +1,12 @@
+{
+    "SIDEBAR": {
+        "DASHBOARD": "Painel Inicial",
+        "TRANSFER": "Transferência",
+        "LOAN": "Créditos",
+        "TRANSACTIONS": "Movimentos",
+        "PROFILE": "Perfil"
+    },
+    "DASHBOARD": {
+        "BALANCE": "Saldo Contabilístico"
+    }
+}
