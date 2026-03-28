@@ -11,3 +11,4 @@ exibindo alertas amigáveis na interface
 ---Criação de indicadores de Loading (Spinners visuais ou desabilitação de botões)
 enquanto as requisições estiverem em andamento.
 ---ajustar limite empréstimo
+---css login

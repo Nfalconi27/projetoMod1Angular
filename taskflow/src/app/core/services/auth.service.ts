@@ -21,6 +21,12 @@ export class AuthService {
     return false
   }
 
+  logout(): void {
+    localStorage.removeItem('token');
+    this.isAuthenticated.set(false);
+    this.router.navigate(['/login']);
+  }
+
   getToken(): string | null {
     return localStorage.getItem('token')
   }
