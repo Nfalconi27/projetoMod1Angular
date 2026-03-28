@@ -1,6 +1,6 @@
-# projetoMod1Angular
+# projetoMod2Angular
 
-
+**EM CONSTRUÇÃO**
 ---aumentar últ trans para defer funcionar
 ---toSignal em tudo
 ---material no botão de simulação
