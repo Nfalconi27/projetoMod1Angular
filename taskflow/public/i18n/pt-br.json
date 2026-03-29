@@ -7,6 +7,14 @@
         "PROFILE": "Perfil"
     },
     "DASHBOARD": {
-        "BALANCE": "Saldo Disponível"
+        "BALANCE": "Saldo Disponível",
+        "LOAN_AVAILABLE": "Valor de Empréstimo Disponível",
+        "CARD_BILL": "Fatura do Cartão de Crédito",
+        "LAST_TRANSACTIONS": "Últimas Transações",
+        "VIEW_BILL": "Ver Fatura"
+    },
+    "HEADER": {
+        "WELCOME": "Bem-vindo/a",
+        "LOGOUT": "Sair"
     }
 }

@@ -7,6 +7,7 @@ import { Account } from '../dashboard/models/account.model';
 import { DashboardService } from '../dashboard/services/dashboard.service';
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { LoanSimulatorComponent } from './components/loan-simulator/loan-simulator.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-loan',
@@ -16,7 +17,8 @@ import { LoanSimulatorComponent } from './components/loan-simulator/loan-simulat
     MatChipsModule,
     CurrencyPipe,
     DecimalPipe,
-    LoanSimulatorComponent
+    LoanSimulatorComponent,
+    TranslateModule
   ],
   templateUrl: './loan.component.html',
   styleUrl: './loan.component.css',

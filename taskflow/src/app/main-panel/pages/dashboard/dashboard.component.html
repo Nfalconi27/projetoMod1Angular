@@ -54,7 +54,7 @@
         </div>
       </div>
       <div class="row mt-4">
-        <mat-card-title>Últimas Transações</mat-card-title>
+        <mat-card-title>{{"DASHBOARD.LAST_TRANSACTIONS" | translate}}</mat-card-title>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -87,9 +87,10 @@
       <mat-card-content>
         <app-credit-card-invoice></app-credit-card-invoice>
       </mat-card-content>
-    } @placeholder {
+    } 
+    @placeholder {
       <button mat-raised-button #loadButton style="cursor: pointer">
-        Abrir fatura do cartão de crédito
+        {{"DASHBOARD.VIEW_BILL" | translate}}
         <mat-icon>arrow_downward</mat-icon>
       </button>
     } @loading (minimum 2s) {

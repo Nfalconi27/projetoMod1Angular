@@ -14,7 +14,7 @@
     <mat-card-content>
       <div class="card-container-limite mb-3">
         <mat-card>
-          <div class="fw-bold fs-2">Limite Disponível</div>
+          <div class="fw-bold fs-2">{{"DASHBOARD.LOAN_AVAILABLE" | translate}}</div>
           <div class="fs-3">{{ loanLimit() | currency: "BRL" }}</div>
           <div class="fs-7">
             Taxa de juros: {{ loanInterest() | number: "1.2-2" }}%/mês

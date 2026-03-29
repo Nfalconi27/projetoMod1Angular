@@ -12,3 +12,10 @@
     z-index: 1000;
     width: 100%;
 }
+
+.btn-small {
+  height: 32px;
+  padding: 0 8px;
+  font-size: 12px;
+  line-height: 32px;
+}

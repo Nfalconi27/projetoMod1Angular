@@ -22,7 +22,8 @@ export class AppComponent {
   constructor(private translate: TranslateService) {
     this.translate.addLangs(['pt-pt', 'pt-br']);
     this.translate.setFallbackLang(environment.defaultLang);
-    this.translate.use(environment.defaultLang);
+    const browserLang = this.translate.getBrowserCultureLang();
+    this.translate.use(browserLang?.match(/pt-pt|pt-br/) ? browserLang : environment.defaultLang);
   }
 
   ngOnInit() {

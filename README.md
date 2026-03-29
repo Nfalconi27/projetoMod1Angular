@@ -12,3 +12,4 @@ enquanto as requisições estiverem em andamento.
 ---ajustar limite empréstimo
 ---css login
 ---saída não está em vermelho no extrato
+---onViewPort sem botão

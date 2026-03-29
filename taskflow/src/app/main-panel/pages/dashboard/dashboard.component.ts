@@ -1,17 +1,16 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { TranslatePipe } from '@ngx-translate/core';
 import { NegativeValuesPipe } from '../../../shared/pipes/negative-values.pipe';
 import { Transaction } from '../transactions/models/transaction.model';
 import { TransactionsService } from '../transactions/services/transactions.service';
 import { CreditCardInvoiceComponent } from './components/credit-card-invoice/credit-card-invoice.component';
 import { DashboardService } from './services/dashboard.service';
-import { Account } from './models/account.model';
-import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dashboard',
