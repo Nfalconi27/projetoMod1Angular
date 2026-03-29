@@ -1,13 +1,23 @@
-
-  <mat-card class="text-nf-primary" appearance="outlined">
-    <mat-card-header>
-      <mat-card-title>Extrato</mat-card-title>
-      @if (account$(); as account) {
-            <mat-card-subtitle >
-              <p class="text-nf-primary">Saldo Atual: <strong> {{ account.balance | currency:'BRL' }}</strong></p>        
-            </mat-card-subtitle>
-            }
-    </mat-card-header>
+<mat-card class="text-nf-primary" appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>Extrato</mat-card-title>
+    @if (account$(); as account) {
+      <mat-card-subtitle>
+        <p class="text-nf-primary">
+          Saldo Atual: <strong> {{ account.balance | currency: "BRL" }}</strong>
+        </p>
+      </mat-card-subtitle>
+    } @else {
+      <div class="d-flex justify-content-center align-items-center">
+        <mat-spinner></mat-spinner>
+      </div>
+    }
+  </mat-card-header>
+  @if (loadingExt()) {
+    <div class="d-flex justify-content-center align-items-center">
+      <mat-spinner></mat-spinner>
+    </div>
+  } @else {
     <mat-card-content>
       <table class="table table-striped">
         <thead>
@@ -24,12 +34,17 @@
             <tr>
               <td>{{ item.date | date: "dd/MM/yyyy" }}</td>
               <td>{{ item.description }}</td>
-              <td [class]="item.amount | negativeValues">
-                {{ item.amount | currency: "BRL" : "symbol" : "1.2-2" : "pt-BR" }}
+              <!-- <td [class]="item.amount | negativeValues"> -->
+              <td [class]="item.type | negativeValues">
+                {{
+                  item.amount | currency: "BRL" : "symbol" : "1.2-2" : "pt-BR"
+                }}
               </td>
               <td>
                 {{
-                  item.type === transactionTypesEnum.INCOME ? "Entrada" : "Saída"
+                  item.type === transactionTypesEnum.INCOME
+                    ? "Entrada"
+                    : "Saída"
                 }}
               </td>
               <td>
@@ -50,10 +65,10 @@
           }
         </tbody>
       </table>
-      
+
       <button class="btn btn-primary" (click)="openCreateTransactionDialog()">
         Adicionar Transação
       </button>
     </mat-card-content>
-  </mat-card>
-
+  }
+</mat-card>

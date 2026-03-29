@@ -60,3 +60,7 @@
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
+
+.form-container {
+  width: 400px; /* ou 100%, ou 50% */
+}

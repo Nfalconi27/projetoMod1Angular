@@ -106,7 +106,8 @@ export class TransferComponent {
     }
 
     this.isTransfering.set(true);
-
+    payload.amount = -Math.abs(payload.amount);
+    payload2.amount = -Math.abs(payload2.amount);
 
     this.transactionsService
       .createTransaction(payload)

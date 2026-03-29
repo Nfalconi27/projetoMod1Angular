@@ -4,11 +4,11 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'negativeValues',
 })
 export class NegativeValuesPipe implements PipeTransform {
-  transform(value: number): string {
-    if (value > 0) {
+  transform(value: string): string {
+    if (value === 'income') {
       return 'text-success';
     }
-    if (value < 0) {
+    if (value === 'expense') {
       return 'text-danger';
     }
 

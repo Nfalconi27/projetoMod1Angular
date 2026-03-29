@@ -11,6 +11,9 @@ import { Transaction } from '../transactions/models/transaction.model';
 import { TransactionsService } from '../transactions/services/transactions.service';
 import { CreditCardInvoiceComponent } from './components/credit-card-invoice/credit-card-invoice.component';
 import { DashboardService } from './services/dashboard.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { finalize } from 'rxjs';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -23,7 +26,8 @@ import { DashboardService } from './services/dashboard.service';
     MatButton,
     CreditCardInvoiceComponent,
     MatProgressSpinnerModule,
-    TranslatePipe
+    TranslatePipe,
+    MatSnackBarModule
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
@@ -31,20 +35,27 @@ import { DashboardService } from './services/dashboard.service';
 export class DashboardComponent {
   private readonly dashboardService = inject(DashboardService);
   private readonly transactionService = inject(TransactionsService);
+  constructor(private snackBar: MatSnackBar) {}
+  loadingLoadAc = signal(true);
+  loadingTrans = signal(true);
+
+  ngOnInit() {
+    this.dashboardService.loadAccount();
+    this.loadingLoadAc.set(false)
+  }
+
 
   isBalanceVisible = signal(false);
   toggleBalanceVisibility() {
     this.isBalanceVisible.update((visible) => !visible);
   }
 
-  // accountData = toSignal<Account | undefined>(
-  //   this.dashboardService.getAccount(),
-  //   { initialValue: undefined },
-  // );
   accountData = this.dashboardService.account;
 
 
-  transactions = toSignal(this.transactionService.getTransactions(), { 
+  transactions = toSignal(this.transactionService.getTransactions().pipe(
+    finalize(() => this.loadingTrans.set(false))
+  ), { 
     initialValue: [] as Transaction[]
   });
 

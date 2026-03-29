@@ -17,6 +17,8 @@ import { Transaction } from '../../models/transaction.model';
 import { TransactionsService } from '../../services/transactions.service';
 import { ConfirmDeleteDialogComponent } from '../confirm-delete-dialog/confirm-delete-dialog.component';
 import { CreateTransactionComponent } from '../create-transaction/create-transaction.component';
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+
 
 @Component({
   selector: 'app-list-transactions',
@@ -27,7 +29,8 @@ import { CreateTransactionComponent } from '../create-transaction/create-transac
     MatCardTitle,
     MatCardHeader,
     MatCardModule,
-  ],
+    MatProgressSpinnerModule
+],
   templateUrl: './list-transactions.component.html',
   styleUrl: './list-transactions.component.css',
 })
@@ -46,13 +49,17 @@ export class ListTransactionsComponent {
   
   account$ = this.dashboardService.account;
 
+  loadingExt = signal(false)
+
   ngOnInit(): void {
     this.loadTransactions();
   }
   loadTransactions(): void {
+    this.loadingExt.set(true)
     this.transactionsService.getTransactions().subscribe({
       next: (data) => {
         this.transactions.set(data);
+        this.loadingExt.set(false)
       },
       error: (err) => {
         console.log(err);

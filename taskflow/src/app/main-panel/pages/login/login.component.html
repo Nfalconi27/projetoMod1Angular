@@ -1,13 +1,29 @@
-<h2>Login</h2>
-<form (ngSubmit)="onSubmit()">
-    <div>
-        <label for="email">E-mail:</label>
-        <input type="email" id="email" [(ngModel)]="email" name="email" required>
-    </div>
-    <div>
-        <label for="password">Senha:</label>
-        <input type="password" id="password" [(ngModel)]="password" name="password" required>
-    </div>
-    <button type="submit">Login</button>
-    <p *ngIf="errorMessage">{{ errorMessage }}</p>
-</form>
+<div class="container cont-total d-flex justify-content-center align-items-center vh-20">
+  <mat-card class="p-4 m-5 login-card ">
+
+    <h2 class="text-center text-nf-primary mb-4">Login</h2>
+
+    <form (ngSubmit)="onSubmit()" #form="ngForm">
+
+      <mat-form-field appearance="outline" class="w-100 mb-3 ">
+        <mat-label class="text-nf-primary">E-mail</mat-label>
+        <input matInput type="email" [(ngModel)]="email" name="email" required>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label class="text-nf-primary">Senha</mat-label>
+        <input matInput type="password" [(ngModel)]="password" name="password" required>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" class="w-100">
+        Acessar
+      </button>
+
+      <p *ngIf="errorMessage" class="text-danger mt-3 text-center">
+        {{ errorMessage }}
+      </p>
+
+    </form>
+
+  </mat-card>
+</div>

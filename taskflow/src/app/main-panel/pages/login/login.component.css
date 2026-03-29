@@ -1,0 +1,9 @@
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 12px;
+}
+
+.cont-total {
+    background: radial-gradient(circle, rgb(18, 189, 185) 0%, #ffffff 70%);
+}

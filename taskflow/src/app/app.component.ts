@@ -15,9 +15,9 @@ import { environment } from '../environments/environment';
 })
 
 export class AppComponent {
-  private readonly dashboardService = inject(DashboardService);
+  // private readonly dashboardService = inject(DashboardService);
 
-  account = toSignal(this.dashboardService.getAccount());
+  // account = toSignal(this.dashboardService.getAccount());
 
   constructor(private translate: TranslateService) {
     this.translate.addLangs(['pt-pt', 'pt-br']);
@@ -26,8 +26,8 @@ export class AppComponent {
     this.translate.use(browserLang?.match(/pt-pt|pt-br/) ? browserLang : environment.defaultLang);
   }
 
-  ngOnInit() {
-    this.dashboardService.loadAccount();
-  }
+  // ngOnInit() {
+  //   this.dashboardService.loadAccount();
+  // }
 
 }

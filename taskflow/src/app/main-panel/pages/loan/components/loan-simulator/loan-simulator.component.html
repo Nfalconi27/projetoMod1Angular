@@ -1,4 +1,9 @@
-<form [formGroup]="formCred" (ngSubmit)="onSubmit()">
+@if (loadingEmpr()) {
+  <div class="d-flex justify-content-center align-items-center">
+    <mat-spinner></mat-spinner>
+  </div>
+} @else {
+  <form [formGroup]="formCred" (ngSubmit)="onSubmit()" class="form-container">
     <div class="form-group">
       <label for="date-field">Valor Desejado:</label>
       <input
@@ -22,14 +27,14 @@
 
     <div class="simulation-card mt-4">
       <div class="simulation-item">
-        <span>Valor da Parcela   </span>
+        <span>Valor da Parcela </span>
         <strong>{{
           formCred.get("valorParcela")?.value | currency: "BRL"
         }}</strong>
       </div>
 
       <div class="simulation-item">
-        <span>Total a Pagar   </span>
+        <span>Total a Pagar </span>
         <strong>{{
           formCred.get("valorTotal")?.value | currency: "BRL"
         }}</strong>
@@ -39,3 +44,4 @@
       <button type="submit" class="btn btn-primary me-2">Contratar</button>
     </div>
   </form>
+}

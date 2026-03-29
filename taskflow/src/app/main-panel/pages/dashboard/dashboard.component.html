@@ -14,6 +14,11 @@
       }
 
       <div class="container">
+        @if(loadingTrans()) {
+        <div class="d-flex justify-content-center align-items-center">
+          <mat-spinner></mat-spinner>
+        </div>
+      } @else {
         <div class="row text-center">
           <div class="col">
             <mat-card appearance="outlined">
@@ -52,36 +57,43 @@
             </mat-card>
           </div>
         </div>
+      }
       </div>
-      <div class="row mt-4">
-        <mat-card-title>{{"DASHBOARD.LAST_TRANSACTIONS" | translate}}</mat-card-title>
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th scope="col">Data</th>
-              <th scope="col">Descrição</th>
-              <th scope="col">Valor</th>
-              <th scope="col">Tipo</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (item of ultimasTransacoes(); track $index) {
+      @if(loadingLoadAc()) {
+        <div class="d-flex justify-content-center align-items-center">
+          <mat-spinner></mat-spinner>
+        </div>
+      } @else {
+        <div class="row mt-4">
+          <mat-card-title>{{"DASHBOARD.LAST_TRANSACTIONS" | translate}}</mat-card-title>
+          <table class="table table-striped">
+            <thead>
               <tr>
-                <td>{{ item.date | date: "dd/MM/yyyy" }}</td>
-                <td>{{ item.description }}</td>
-                <td [class]="item.amount | negativeValues">
-                  {{
-                    item.amount | currency: "BRL" : "symbol" : "1.2-2" : "pt-BR"
-                  }}
-                </td>
-                <td>
-                  {{ item.type === "income" ? "Entrada" : "Saída" }}
-                </td>
+                <th scope="col">Data</th>
+                <th scope="col">Descrição</th>
+                <th scope="col">Valor</th>
+                <th scope="col">Tipo</th>
               </tr>
-            }
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              @for (item of ultimasTransacoes(); track $index) {
+                <tr>
+                  <td>{{ item.date | date: "dd/MM/yyyy" }}</td>
+                  <td>{{ item.description }}</td>
+                  <td [class]="item.type | negativeValues">
+                    {{
+                      item.amount | currency: "BRL" : "symbol" : "1.2-2" : "pt-BR"
+                    }}
+                  </td>
+                  <td>
+                    {{ item.type === "income" ? "Entrada" : "Saída" }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
     </mat-card-content>
     @defer (on viewport) {
       <mat-card-content>

@@ -8,11 +8,13 @@ import { DashboardService } from '../dashboard/services/dashboard.service';
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { LoanSimulatorComponent } from './components/loan-simulator/loan-simulator.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-loan',
   imports: [
     ReactiveFormsModule,
+    MatButtonModule,
     MatCardModule,
     MatChipsModule,
     CurrencyPipe,

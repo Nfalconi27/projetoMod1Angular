@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, signal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -9,17 +9,24 @@ import {
 
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
-import { first, Observable, take } from 'rxjs';
+import { finalize, first, Observable, switchMap, take } from 'rxjs';
 import { DashboardService } from '../../../dashboard/services/dashboard.service';
 import { Transaction } from '../../../transactions/models/transaction.model';
 import { TransactionsService } from '../../../transactions/services/transactions.service';
 import { Loan } from '../../model/loan.model';
 import { LoanService } from '../../services/loan.service';
 import { Account } from '../../../dashboard/models/account.model';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-loan-simulator',
-  imports: [ReactiveFormsModule, MatCardModule, CurrencyPipe, MatChipsModule],
+  imports: [
+    ReactiveFormsModule,
+    MatCardModule,
+    CurrencyPipe,
+    MatChipsModule,
+    MatProgressSpinnerModule,
+  ],
   templateUrl: './loan-simulator.component.html',
   styleUrl: './loan-simulator.component.css',
 })
@@ -39,7 +46,6 @@ export class LoanSimulatorComponent {
   //   initialValue: undefined,
   // });
   account$ = this.dashboardService.account;
-
 
   ngOnInit(): void {
     this.dashboardService.loadAccount();
@@ -87,75 +93,81 @@ export class LoanSimulatorComponent {
     return Number(value.replace('.', '').replace(',', '.'));
   }
 
+  loadingEmpr = signal(false);
+
   onSubmit(): void {
     const formValue = this.formCred.getRawValue();
     let { valorParcela, valorTotal, ...payload } = formValue;
     let { parcelas, ...payload2 } = formValue;
 
-    // this.account$
-    // .pipe(take(1))
-    // .subscribe((account) => {
-    //   this.createLoan(payload);
-    //   this.saveTransaction(payload2);
-    //   const novoSaldo = +account!.balance + +payload.amount;
-    //   this.updateBalance(novoSaldo);
-    //   this.formCred.reset();
-    //   alert('Operação concluída com sucesso!');
-    // });
     const account = this.account$();
     if (!account) return;
     const novoSaldo = +account!.balance + +payload.amount;
-    this.createLoan(payload);
-    this.saveTransaction(payload2);
-    this.updateBalance(novoSaldo);
-    this.formCred.reset();
-    alert('Operação concluída com sucesso!');
-    
-  }
 
-  createLoan(payload: Loan): void {
+    this.loadingEmpr.set(true);
+
     this.loanService
       .createLoan(payload)
-      .pipe(first())
+      .pipe(
+        switchMap(() => this.transactionsService.createTransaction(payload2)),
+        switchMap(() => this.dashboardService.updateBalance(novoSaldo)),
+        finalize(() => this.loadingEmpr.set(false)),
+      )
       .subscribe({
         next: () => {
-          console.log('Sucesso1!');
+          this.formCred.reset();
+          alert('Operação concluída com sucesso!');
         },
-        error: (err) => {
-          console.log(err);
-        },
-      });
-  }
-  saveTransaction(payload: Transaction): void {
-    this.transactionsService
-      .createTransaction(payload)
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          console.log('Sucesso2!');
-        },
-        error: (err) => {
-          console.log(err);
+        error: () => {
+          alert('Erro ao realizar operação');
         },
       });
+    // this.loadingEmpr.set(true)
+    // this.createLoan(payload);
+    // this.saveTransaction(payload2);
+    // this.updateBalance(novoSaldo);
+    // this.formCred.reset();
+    // alert('Operação concluída com sucesso!');
   }
-  updateBalance(balance: number): void {
-    this.dashboardService
-      .updateBalance(balance)
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          console.log('Saldo Atualizado!');
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      });
-  }
-}
-function toSignal<T>(
-  arg0: Observable<Account>,
-  arg1: { initialValue: undefined },
-) {
-  throw new Error('Function not implemented.');
+
+  // createLoan(payload: Loan): void {
+  //   this.loanService
+  //     .createLoan(payload)
+  //     .pipe(first())
+  //     .subscribe({
+  //       next: () => {
+  //         console.log('Sucesso1!');
+  //       },
+  //       error: (err) => {
+  //         console.log(err);
+  //       },
+  //     });
+  // }
+  // saveTransaction(payload: Transaction): void {
+  //   this.transactionsService
+  //     .createTransaction(payload)
+  //     .pipe(first())
+  //     .subscribe({
+  //       next: () => {
+  //         console.log('Sucesso2!');
+  //       },
+  //       error: (err) => {
+  //         console.log(err);
+  //       },
+  //     });
+  // }
+  // updateBalance(balance: number): void {
+  //   this.dashboardService
+  //     .updateBalance(balance)
+  //     .pipe(first())
+  //     .subscribe({
+  //       next: () => {
+  //         console.log('Saldo Atualizado!');
+  //       },
+  //       error: (err) => {
+  //         console.log(err);
+  //       },
+  //     });
+  // }
+
 }
