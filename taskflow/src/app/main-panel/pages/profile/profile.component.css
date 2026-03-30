@@ -1,5 +1,29 @@
-mat-nav-list {
+.profile-container {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  gap: 24px;
+  padding: 24px;
+}
+
+.profile-card {
+  width: 100%;
+  border-radius: 16px;
+}
+
+.nav-item {
+  border-radius: 8px;
+  margin: 4px 8px;
+  transition: background 0.2s;
+}
+
+.nav-item:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.arrow {
+  margin-left: auto;
+  opacity: 0.6;
+}
+
+.profile-content {
+  flex: 1;
 }

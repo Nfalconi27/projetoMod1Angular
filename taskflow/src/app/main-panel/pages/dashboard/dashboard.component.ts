@@ -1,19 +1,18 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslatePipe } from '@ngx-translate/core';
+import { finalize } from 'rxjs';
 import { NegativeValuesPipe } from '../../../shared/pipes/negative-values.pipe';
 import { Transaction } from '../transactions/models/transaction.model';
 import { TransactionsService } from '../transactions/services/transactions.service';
 import { CreditCardInvoiceComponent } from './components/credit-card-invoice/credit-card-invoice.component';
-import { DashboardService } from './services/dashboard.service';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { finalize } from 'rxjs';
 import { Account } from './models/account.model';
+import { DashboardService } from './services/dashboard.service';
 
 
 @Component({
@@ -24,7 +23,6 @@ import { Account } from './models/account.model';
     CurrencyPipe,
     DatePipe,
     MatIconModule,
-    MatButton,
     CreditCardInvoiceComponent,
     MatProgressSpinnerModule,
     TranslatePipe,

@@ -1,9 +1,11 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, inject, Input, signal } from '@angular/core';
 import {
+  AbstractControl,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 
@@ -46,22 +48,35 @@ export class LoanSimulatorComponent {
   account$ = this.dashboardService.account;
   loadingLoadAc = signal(true);
 
+  limit = this.loanService.loanLimit;
+
+  deduct(valor: number) {
+    this.loanService.deduct(valor);
+  }
+
   ngOnInit(): void {
     // this.dashboardService.loadAccount();
     this.buildForm();
   }
 
   account = toSignal<Account | undefined>(
-    this.dashboardService.getAccount().pipe(
-      finalize(() => this.loadingLoadAc.set(false))
-    ),
-    { initialValue: null }
+    this.dashboardService
+      .getAccount()
+      .pipe(finalize(() => this.loadingLoadAc.set(false))),
+    { initialValue: null },
   );
 
+  maxLimitValidator(): ValidatorFn {
+    return (control: AbstractControl) => {
+      if (!control.value) return null;
+
+      return control.value > this.limit() ? { maxLimit: true } : null;
+    };
+  }
   buildForm(): void {
     this.formCred = new FormGroup({
       date: new FormControl(this.todayISO),
-      amount: new FormControl(null, Validators.required),
+      amount: new FormControl(null, [Validators.required,this.maxLimitValidator()]),
       description: new FormControl('Crédito Empréstimo'),
       parcelas: new FormControl('1', Validators.required),
       valorParcela: new FormControl({ value: 0, disabled: true }),
@@ -95,7 +110,6 @@ export class LoanSimulatorComponent {
 
   parseCurrency(value: string): number {
     if (!value) return 0;
-
     return Number(value.replace('.', '').replace(',', '.'));
   }
 
@@ -121,6 +135,7 @@ export class LoanSimulatorComponent {
       )
       .subscribe({
         next: () => {
+          this.deduct(payload.amount);
           this.formCred.reset();
           alert('Operação concluída com sucesso!');
         },

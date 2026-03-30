@@ -2,7 +2,7 @@
   "account": {
     "id": "5378.1222-7",
     "name": "Mariana",
-    "balance": 73137
+    "balance": 40233941
   },
   "transactions": [
     {
@@ -34,6 +34,87 @@
       "valorParcela": "152.75",
       "valorTotal": "1527.47",
       "type": "income"
+    },
+    {
+      "id": "c340",
+      "date": "2026-03-30",
+      "description": "teste",
+      "amount": 5000,
+      "type": "income"
+    },
+    {
+      "id": "a0b1",
+      "date": "2026-03-30",
+      "description": "teste",
+      "amount": -4054,
+      "type": "expense"
+    },
+    {
+      "id": "4174",
+      "date": "2026-03-30",
+      "description": "transf plano",
+      "amount": -5404,
+      "type": "expense"
+    },
+    {
+      "id": "57ee",
+      "date": "2026-03-30",
+      "description": "teste",
+      "amount": 254254,
+      "type": "income"
+    },
+    {
+      "id": "d3cd",
+      "date": "2026-03-30",
+      "description": "teste",
+      "amount": -5542,
+      "type": "expense"
+    },
+    {
+      "id": "f422",
+      "date": "2026-03-30",
+      "description": "teste",
+      "amount": 25424,
+      "type": "income"
+    },
+    {
+      "id": "dfa5",
+      "date": "2026-03-30",
+      "description": "teste",
+      "amount": -5242,
+      "type": "expense"
+    },
+    {
+      "id": "598a",
+      "date": "2026-03-30",
+      "description": "lk~lp",
+      "amount": -2542,
+      "type": "expense"
+    },
+    {
+      "id": "d0c0",
+      "date": "2026-03-30",
+      "description": "kbjk",
+      "amount": -2425,
+      "type": "expense"
+    },
+    {
+      "id": "1b0b",
+      "date": "2026-03-30",
+      "amount": 40045804,
+      "description": "Crédito Empréstimo",
+      "valorParcela": "43469720.24",
+      "valorTotal": "43469720.24",
+      "type": "income"
+    },
+    {
+      "id": "4bff",
+      "date": "2026-03-30",
+      "amount": 10000,
+      "description": "Crédito Empréstimo",
+      "valorParcela": "10855.00",
+      "valorTotal": "10855.00",
+      "type": "income"
     }
   ],
   "transfers": [
@@ -60,6 +141,38 @@
       "amount": 1000,
       "description": "Crédito Empréstimo",
       "parcelas": "10",
+      "type": "income"
+    },
+    {
+      "id": "9885",
+      "date": "2026-03-30",
+      "amount": 10000,
+      "description": "Crédito Empréstimo",
+      "parcelas": "1",
+      "type": "income"
+    },
+    {
+      "id": "5f51",
+      "date": "2026-03-30",
+      "amount": 40045804,
+      "description": "Crédito Empréstimo",
+      "parcelas": "1",
+      "type": "income"
+    },
+    {
+      "id": "1886",
+      "date": "2026-03-30",
+      "amount": 90000,
+      "description": "Crédito Empréstimo",
+      "parcelas": "1",
+      "type": "income"
+    },
+    {
+      "id": "8ecc",
+      "date": "2026-03-30",
+      "amount": 10000,
+      "description": "Crédito Empréstimo",
+      "parcelas": "1",
       "type": "income"
     }
   ]

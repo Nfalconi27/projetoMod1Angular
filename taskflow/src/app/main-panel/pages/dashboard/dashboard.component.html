@@ -14,58 +14,73 @@
       }
 
       <div class="container">
-        @if(loadingTrans()) {
-        <div class="d-flex justify-content-center align-items-center">
-          <mat-spinner></mat-spinner>
-        </div>
-      } @else {
-        <div class="row text-center">
-          <div class="col">
-            <mat-card appearance="outlined">
-              <mat-card-content class="p-0">
-                <p class="h3">{{"DASHBOARD.BALANCE" | translate}}</p>
-                <div class="balance-row">
-                  <button mat-icon-button (click)="toggleBalanceVisibility()">
-                    <mat-icon class="small-icon text-nf-secondary">
-                      {{ isBalanceVisible() ? "visibility" : "visibility_off" }}
-                    </mat-icon>
-                  </button>
+        @if (loadingTrans()) {
+          <div class="d-flex justify-content-center align-items-center">
+            <mat-spinner></mat-spinner>
+          </div>
+        } @else {
+          <div class="row text-center">
+            <div class="col">
+              <mat-card appearance="outlined">
+                <mat-card-content>
+                  <p class="h2">{{ "DASHBOARD.BALANCE" | translate }}</p>
+                </mat-card-content>
+                <div
+                  class="h3 d-flex align-items-center justify-content-center gap-2"
+                >
+                  <!-- <button mat-icon-button (click)="toggleBalanceVisibility()"> -->
+                  <mat-icon
+                    class="text-nf-secondary"
+                    (click)="toggleBalanceVisibility()"
+                  >
+                    {{ isBalanceVisible() ? "visibility" : "visibility_off" }}
+                  </mat-icon>
+                  <!-- </button> -->
 
                   @if (isBalanceVisible()) {
                     <p>{{ account()?.balance | currency: "BRL" }}</p>
                   } @else {
-                    <p>R$ **************</p>
+                    <p>R$ ***********</p>
                   }
                 </div>
-              </mat-card-content>
-            </mat-card>
+              </mat-card>
+            </div>
+            <div class="col">
+              <mat-card appearance="outlined">
+                <mat-card-content>
+                  <p class="h2">Receitas (mês)</p>
+                </mat-card-content>
+                <div
+                  class="h3 d-flex align-items-center justify-content-center"
+                >
+                  {{ totalEntradasMes() | currency: "BRL" }}
+                </div>
+              </mat-card>
+            </div>
+            <div class="col">
+              <mat-card appearance="outlined">
+                <mat-card-content>
+                  <div
+                    class="h3 d-flex align-items-center justify-content-center"
+                  >
+                    Despesas (mês)
+                  </div>
+                </mat-card-content>
+                <p class="h3">{{ totalDespesasMes() | currency: "BRL" }}</p>
+              </mat-card>
+            </div>
           </div>
-          <div class="col">
-            <mat-card appearance="outlined">
-              <mat-card-content>
-                <p class="h3">Receitas (mês)</p>
-              </mat-card-content>
-              <p>{{ totalEntradasMes() | currency: "BRL" }}</p>
-            </mat-card>
-          </div>
-          <div class="col">
-            <mat-card appearance="outlined">
-              <mat-card-content>
-                <p class="h3">Despesas (mês)</p>
-              </mat-card-content>
-              <p>{{ totalDespesasMes() | currency: "BRL" }}</p>
-            </mat-card>
-          </div>
-        </div>
-      }
+        }
       </div>
-      @if(loadingLoadAc()) {
+      @if (loadingLoadAc()) {
         <div class="d-flex justify-content-center align-items-center">
           <mat-spinner></mat-spinner>
         </div>
       } @else {
         <div class="row mt-4">
-          <mat-card-title>{{"DASHBOARD.LAST_TRANSACTIONS" | translate}}</mat-card-title>
+          <mat-card-title>{{
+            "DASHBOARD.LAST_TRANSACTIONS" | translate
+          }}</mat-card-title>
           <table class="table table-striped">
             <thead>
               <tr>
@@ -82,7 +97,8 @@
                   <td>{{ item.description }}</td>
                   <td [class]="item.type | negativeValues">
                     {{
-                      item.amount | currency: "BRL" : "symbol" : "1.2-2" : "pt-BR"
+                      item.amount
+                        | currency: "BRL" : "symbol" : "1.2-2" : "pt-BR"
                     }}
                   </td>
                   <td>
@@ -95,7 +111,22 @@
         </div>
       }
     </mat-card-content>
+    <div style="height: 800px"></div> /// para testar o viewport
     @defer (on viewport) {
+      <mat-card-content>
+        <app-credit-card-invoice></app-credit-card-invoice>
+      </mat-card-content>
+    } @placeholder {
+      <div style="height: 100px"></div>
+    } @loading (minimum 2s) {
+      <div
+        class="d-flex justify-content-center align-items-center"
+        style="height: 100px"
+      >
+        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+      </div>
+    }
+    <!-- @defer (on viewport) {
       <mat-card-content>
         <app-credit-card-invoice></app-credit-card-invoice>
       </mat-card-content>
@@ -112,6 +143,6 @@
       >
         <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
       </div>
-    }
+    } -->
   </mat-card>
 </div>

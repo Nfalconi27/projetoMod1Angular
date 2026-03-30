@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { catchError, EMPTY, Observable, throwError } from 'rxjs';
 import { Loan } from '../model/loan.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -12,6 +12,19 @@ export class LoanService {
   constructor(private snackBar: MatSnackBar) {}
 
   apiUrl = 'http://localhost:3000';
+
+  private _loanLimit = signal(100000);
+  loanLimit = this._loanLimit.asReadonly();
+  deduct(value: number) {
+    if(this._loanLimit() >= value){
+      this._loanLimit.update(current => current - value);
+    } else {
+      this.showError('Limite excedido')
+    }
+  }
+  set(value: number) {
+    this._loanLimit.set(value);
+  }
 
   createLoan(loan: Loan): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/loans`, loan).pipe(

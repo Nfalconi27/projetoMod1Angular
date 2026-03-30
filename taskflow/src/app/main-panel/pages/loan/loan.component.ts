@@ -1,16 +1,14 @@
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, Input, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
-import { finalize } from 'rxjs';
-import { Account } from '../dashboard/models/account.model';
 import { DashboardService } from '../dashboard/services/dashboard.service';
 import { LoanSimulatorComponent } from './components/loan-simulator/loan-simulator.component';
+import { LoanService } from './services/loan.service';
 
 @Component({
   selector: 'app-loan',
@@ -30,10 +28,13 @@ import { LoanSimulatorComponent } from './components/loan-simulator/loan-simulat
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoanComponent {
-  loanLimit = signal(100000);
+  private readonly dashboardService = inject(DashboardService);
+  private loanService = inject(LoanService)
+  limit = this.loanService.loanLimit;
+
+
   loanInterest = signal(8.55);
 
-  private readonly dashboardService = inject(DashboardService);
 
   loadingLoadAc = signal(true);
 

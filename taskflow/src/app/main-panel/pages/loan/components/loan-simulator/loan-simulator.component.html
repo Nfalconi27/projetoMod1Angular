@@ -12,7 +12,15 @@
         id="amount-field"
         formControlName="amount"
         placeholder="Valor do crédito"
+        [max]="limit()"
       />
+      @if(formCred.get('amount')?.hasError('maxLimit')){
+        <small
+          class="text-danger"        
+        >
+          O valor não pode ser maior que {{ limit() | currency: "BRL" }}
+        </small>
+      }
     </div>
     <div class="form-group">
       <label for="description-field">Parcelas:</label>
@@ -41,7 +49,7 @@
       </div>
     </div>
     <div class="mt-3">
-      <button type="submit" class="btn btn-primary me-2">Contratar</button>
+      <button type="submit" class="btn btn-primary me-2" [disabled]="formCred.get('amount')?.hasError('maxLimit')">Contratar</button>
     </div>
   </form>
 }

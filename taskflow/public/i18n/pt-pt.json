@@ -8,7 +8,7 @@
     },
     "DASHBOARD": {
         "BALANCE": "Saldo Contabilístico",
-        "LOAN_AVAILABLE": "Valor de Crédito Disponível",
+        "AVAILABLE_LOAN": "Valor de Crédito Disponível",
         "CARD_BILL": "Fatura do Cartão de Crédito",
         "LAST_TRANSACTIONS": "Últimos Movimentos",
         "VIEW_BILL": "Ver Faturas"
