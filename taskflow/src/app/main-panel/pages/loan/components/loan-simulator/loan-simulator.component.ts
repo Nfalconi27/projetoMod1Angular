@@ -17,6 +17,7 @@ import { Loan } from '../../model/loan.model';
 import { LoanService } from '../../services/loan.service';
 import { Account } from '../../../dashboard/models/account.model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-loan-simulator',
@@ -41,16 +42,21 @@ export class LoanSimulatorComponent {
 
   todayLocale = new Date().toLocaleDateString().split('/');
   todayISO = `${this.todayLocale[2]}-${this.todayLocale[1]}-${this.todayLocale[0]}`;
-  // account$ = this.dashboardService.account$;
-  // account$ = toSignal<Account | undefined>(this.dashboardService.getAccount(), {
-  //   initialValue: undefined,
-  // });
+
   account$ = this.dashboardService.account;
+  loadingLoadAc = signal(true);
 
   ngOnInit(): void {
-    this.dashboardService.loadAccount();
+    // this.dashboardService.loadAccount();
     this.buildForm();
   }
+
+  account = toSignal<Account | undefined>(
+    this.dashboardService.getAccount().pipe(
+      finalize(() => this.loadingLoadAc.set(false))
+    ),
+    { initialValue: null }
+  );
 
   buildForm(): void {
     this.formCred = new FormGroup({
@@ -169,5 +175,4 @@ export class LoanSimulatorComponent {
   //       },
   //     });
   // }
-
 }

@@ -2,11 +2,18 @@
   <div>
     <img src="assets/images/logo.png" alt="Logo NF" width="130" height="90" />
   </div>
+  @if (authService.isAuthenticated()) {
+  
+  <div class="d-flex align-items-center text-nf-primary">
+    <span class="me-3">
+            Saldo Atual:
+            <strong>{{ loadingLoadAc() ? "Carregando..." : (accountData()?.balance | currency: 'BRL') }}</strong>
+    </span>
+  </div>
 
   <div class="d-flex align-items-center text-nf-primary">
-    @if (authService.isAuthenticated()) {
       <span class="me-3"
-        >{{ "HEADER.WELCOME" | translate }}, {{ accountData()?.name }}!</span
+        >{{ "HEADER.WELCOME" | translate }}, {{ loadingLoadAc() ? "Cliente" : accountData()?.name }}!</span
       >
       <button mat-flat-button class="btn-small" (click)="mudarIdioma('pt-br')">BR</button>
       <button mat-flat-button class="btn-small" (click)="mudarIdioma('pt-pt')">PT</button>
@@ -19,6 +26,6 @@
         {{ "HEADER.LOGOUT" | translate }}
         <mat-icon>logout</mat-icon>
       </button>
-    }
-  </div>
+    </div>
+  }
 </header>

@@ -1,14 +1,16 @@
-import { Component, inject, Input, signal } from '@angular/core';
+import { CurrencyPipe, DecimalPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, Input, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { TranslateModule } from '@ngx-translate/core';
+import { finalize } from 'rxjs';
 import { Account } from '../dashboard/models/account.model';
 import { DashboardService } from '../dashboard/services/dashboard.service';
-import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { LoanSimulatorComponent } from './components/loan-simulator/loan-simulator.component';
-import { TranslateModule } from '@ngx-translate/core';
-import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-loan',
@@ -20,10 +22,12 @@ import { MatButtonModule } from '@angular/material/button';
     CurrencyPipe,
     DecimalPipe,
     LoanSimulatorComponent,
-    TranslateModule
+    TranslateModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './loan.component.html',
   styleUrl: './loan.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoanComponent {
   loanLimit = signal(100000);
@@ -31,10 +35,7 @@ export class LoanComponent {
 
   private readonly dashboardService = inject(DashboardService);
 
-  // account$ = toSignal<Account | undefined>(this.dashboardService.getAccount(), {
-  //   initialValue: undefined,
-  // });
-  account$ = this.dashboardService.account;
+  loadingLoadAc = signal(true);
 
   @Input() id?: string;
 

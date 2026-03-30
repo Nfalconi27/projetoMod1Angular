@@ -4,10 +4,10 @@
       <mat-card-title>Visão Geral</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      @if (accountData()) {
+      @if (account()) {
         <p>
-          Cliente: <span class="h4"> {{ accountData()?.name }}</span> ------- Conta:
-          <span class="h4"> {{ accountData()?.id }}</span>
+          Cliente: <span class="h4"> {{ account()?.name }}</span> ------- Conta:
+          <span class="h4"> {{ account()?.id }}</span>
         </p>
       } @else {
         <p>Carregando informações da conta...</p>
@@ -32,7 +32,7 @@
                   </button>
 
                   @if (isBalanceVisible()) {
-                    <p>{{ accountData()?.balance | currency: "BRL" }}</p>
+                    <p>{{ account()?.balance | currency: "BRL" }}</p>
                   } @else {
                     <p>R$ **************</p>
                   }

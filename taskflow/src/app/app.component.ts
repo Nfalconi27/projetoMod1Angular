@@ -1,11 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { environment } from '../environments/environment';
 import { HeaderComponent } from './header/header.component';
 import { MainPanelComponent } from './main-panel/main-panel.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { DashboardService } from './main-panel/pages/dashboard/services/dashboard.service';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { TranslateService } from '@ngx-translate/core';
-import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -13,21 +11,13 @@ import { environment } from '../environments/environment';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-
 export class AppComponent {
-  // private readonly dashboardService = inject(DashboardService);
-
-  // account = toSignal(this.dashboardService.getAccount());
-
   constructor(private translate: TranslateService) {
     this.translate.addLangs(['pt-pt', 'pt-br']);
     this.translate.setFallbackLang(environment.defaultLang);
     const browserLang = this.translate.getBrowserCultureLang();
-    this.translate.use(browserLang?.match(/pt-pt|pt-br/) ? browserLang : environment.defaultLang);
+    this.translate.use(
+      browserLang?.match(/pt-pt|pt-br/) ? browserLang : environment.defaultLang,
+    );
   }
-
-  // ngOnInit() {
-  //   this.dashboardService.loadAccount();
-  // }
-
 }

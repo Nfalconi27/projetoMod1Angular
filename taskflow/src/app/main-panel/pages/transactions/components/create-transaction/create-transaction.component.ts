@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TransactionTypes } from '../../constants/transaction-types.enum';
 import { Transaction } from '../../models/transaction.model';
 import { TransactionsService } from '../../services/transactions.service';
@@ -28,17 +28,25 @@ export class CreateTransactionComponent {
   private readonly dialogRef = inject(MatDialogRef<CreateTransactionComponent>);
   private readonly dashboardService = inject(DashboardService);
   private readonly router = inject(Router);
+  readonly data = inject<Partial<Transaction>>(MAT_DIALOG_DATA, { optional: true });
+
+
+//   ngOnInit() {
+//   if (this.data) {
+//     this.transactionForm.patchValue(this.data);
+//   }
+// }
 
   account$ = toSignal<Account | undefined>(this.dashboardService.getAccount(), {
     initialValue: undefined,
   });
 
   transactionForm = new FormGroup({
-    date: new FormControl(new Date().toISOString().split('T')[0], {
+    date: new FormControl(this.data?.date ?? new Date().toISOString().split('T')[0], {
       validators: Validators.required,
       nonNullable: true,
     }),
-    description: new FormControl('', {
+    description: new FormControl(this.data?.description ?? '', {
       validators: [
         Validators.required,
         Validators.minLength(3),
@@ -46,11 +54,11 @@ export class CreateTransactionComponent {
       ],
       nonNullable: true,
     }),
-    amount: new FormControl(0, {
+    amount: new FormControl(this.data?.amount ?? 0.00, {
       validators: [Validators.required],
       nonNullable: true,
     }),
-    type: new FormControl<TransactionTypes | null>(null, {
+    type: new FormControl<TransactionTypes | null>(this.data?.type ?? null, {
       validators: Validators.required,
     }),
   });
@@ -79,9 +87,15 @@ export class CreateTransactionComponent {
 
       const novoSaldo = +account.balance + +payload.amount;
 
-      this.transactionsService
-        .createTransaction(payload)
-        .pipe(switchMap(() => this.dashboardService.updateBalance(novoSaldo)))
+      if (this.data) {
+        const payload2: Transaction = {
+          id: this.data?.id!, 
+          ...payload,
+        };
+        const novoSaldo2 = +account.balance - this.data?.amount! + payload2.amount
+        this.transactionsService
+        .updateTransaction(payload2, this.data?.id!)
+        .pipe(switchMap(() => this.dashboardService.updateBalance(novoSaldo2)))
         .subscribe({
           next: () => {
             alert('Transação feita com sucesso!');
@@ -96,10 +110,31 @@ export class CreateTransactionComponent {
             this.isLoading.set(false);
           },
         });
+        
+      } else {
+        this.transactionsService
+          .createTransaction(payload)
+          .pipe(switchMap(() => this.dashboardService.updateBalance(novoSaldo)))
+          .subscribe({
+            next: () => {
+              alert('Transação feita com sucesso!');
+              this.transactionForm.reset();
+              this.dialogRef.close(true);
+            },
+            error: (err) => {
+              console.error(err);
+              this.errorMessage.set('Erro na operação');
+            },
+            complete: () => {
+              this.isLoading.set(false);
+            },
+          });
+      }
     }
   }
 
   backToList(): void {
-    this.router.navigate(['/transacoes/listar']);
+    this.dialogRef.close(true);
+    this.router.navigate(['/transacoes']);
   }
 }

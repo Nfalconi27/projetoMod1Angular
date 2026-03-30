@@ -1,6 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, inject, Input, OnInit, signal } from '@angular/core';
-import { switchMap } from 'rxjs';
+import { Component, inject, Input, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   FormControl,
@@ -9,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { first } from 'rxjs';
+import { finalize, first, switchMap } from 'rxjs';
 import { Account } from '../dashboard/models/account.model';
 import { DashboardService } from '../dashboard/services/dashboard.service';
 import { TransactionTypes } from '../transactions/constants/transaction-types.enum';
@@ -20,7 +19,7 @@ import { TransfersService } from './services/transfers.service';
 
 @Component({
   selector: 'app-transfer',
-  imports: [ReactiveFormsModule, MatCardModule, CurrencyPipe],
+  imports: [ReactiveFormsModule, MatCardModule],
   templateUrl: './transfer.component.html',
   styleUrl: './transfer.component.css',
 })
@@ -39,7 +38,17 @@ export class TransferComponent {
   // account$ = toSignal<Account | undefined>(this.dashboardService.getAccount(), {
   //   initialValue: undefined,
   // });
-  account$ = this.dashboardService.account;
+
+  // account$ = this.dashboardService.account;
+  loadingLoadAc = signal(true);
+
+  account$ = toSignal<Account | undefined>(
+    this.dashboardService
+      .getAccount()
+      .pipe(finalize(() => this.loadingLoadAc.set(false))),
+    { initialValue: null },
+  );
+
   isTransfering = signal(false);
 
   // ngOnInit(): void {

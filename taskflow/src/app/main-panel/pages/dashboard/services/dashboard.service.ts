@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { catchError, EMPTY, Observable, tap, throwError } from 'rxjs';
+import { catchError, EMPTY, finalize, Observable, tap, throwError } from 'rxjs';
 import { Account } from '../models/account.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -15,9 +15,15 @@ export class DashboardService {
 
   private _account = signal<Account | null>(null);
   account = this._account.asReadonly();
+  private _loadingConta = signal(false);
+  loadingConta = this._loadingConta.asReadonly();
 
   getAccount(): Observable<Account> {
-    return this.http.get<Account>(`${this.apiUrl}`).pipe(
+    this._loadingConta.set(true);
+    return this.http.get<Account>(`${this.apiUrl}`)
+    .pipe(
+      tap(acc => this._account.set(acc)),
+      finalize(() => this._loadingConta.set(false)),
       catchError(() => {
         this.showError('Erro ao buscar conta');
         return EMPTY;
@@ -53,7 +59,8 @@ export class DashboardService {
           this.showError('Erro ao atualizar saldo');
           return EMPTY;
         }),
-      );
+      )
+      ;
   }
 
   private showError(message: string) {

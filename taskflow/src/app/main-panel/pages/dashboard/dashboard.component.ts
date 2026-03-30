@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -13,6 +13,7 @@ import { CreditCardInvoiceComponent } from './components/credit-card-invoice/cre
 import { DashboardService } from './services/dashboard.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { finalize } from 'rxjs';
+import { Account } from './models/account.model';
 
 
 @Component({
@@ -31,6 +32,7 @@ import { finalize } from 'rxjs';
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent {
   private readonly dashboardService = inject(DashboardService);
@@ -39,10 +41,17 @@ export class DashboardComponent {
   loadingLoadAc = signal(true);
   loadingTrans = signal(true);
 
-  ngOnInit() {
-    this.dashboardService.loadAccount();
-    this.loadingLoadAc.set(false)
-  }
+  // ngOnInit() {
+  //   this.dashboardService.loadAccount();
+  //   this.loadingLoadAc.set(false)
+  // }
+
+  account = toSignal<Account | undefined>(
+    this.dashboardService.getAccount().pipe(
+      finalize(() => this.loadingLoadAc.set(false))
+    ),
+    { initialValue: null }
+  );
 
 
   isBalanceVisible = signal(false);
@@ -50,7 +59,7 @@ export class DashboardComponent {
     this.isBalanceVisible.update((visible) => !visible);
   }
 
-  accountData = this.dashboardService.account;
+  // accountData = this.dashboardService.account;
 
 
   transactions = toSignal(this.transactionService.getTransactions().pipe(

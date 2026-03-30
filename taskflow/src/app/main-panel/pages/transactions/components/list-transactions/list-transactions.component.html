@@ -1,17 +1,8 @@
 <mat-card class="text-nf-primary" appearance="outlined">
   <mat-card-header>
     <mat-card-title>Extrato</mat-card-title>
-    @if (account$(); as account) {
-      <mat-card-subtitle>
-        <p class="text-nf-primary">
-          Saldo Atual: <strong> {{ account.balance | currency: "BRL" }}</strong>
-        </p>
-      </mat-card-subtitle>
-    } @else {
-      <div class="d-flex justify-content-center align-items-center">
-        <mat-spinner></mat-spinner>
-      </div>
-    }
+    <mat-card-subtitle>
+    </mat-card-subtitle>
   </mat-card-header>
   @if (loadingExt()) {
     <div class="d-flex justify-content-center align-items-center">
@@ -50,13 +41,14 @@
               <td>
                 <button
                   class="btn btn-sm btn-outline-primary me-2"
-                  (click)="onEdit(item.id)"
-                >
+                  (click)="openCreateTransactionDialog(item)"
+                  >
+                  <!-- (click)="onEdit(item.id)" -->
                   Editar
                 </button>
                 <button
                   class="btn btn-sm btn-outline-danger"
-                  (click)="onDelete(item.id, item.amount)"
+                  (click)="onDelete(item.id)"
                 >
                   Excluir
                 </button>

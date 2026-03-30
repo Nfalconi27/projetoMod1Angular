@@ -2,19 +2,15 @@
   <mat-card class="text-nf-primary" appearance="outlined">
     <mat-card-header>
       <mat-card-title>Simulação de Crédito</mat-card-title>
-      @if (account$(); as account) {
-        <mat-card-subtitle class="text-nf-primary">
-          <p>
-            Saldo Atual:
-            <strong> {{ account.balance | currency: "BRL" }}</strong>
-          </p>
-        </mat-card-subtitle>
-      }
+      <mat-card-subtitle class="text-nf-primary">
+      </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
       <div class="card-container-limite mb-3">
         <mat-card>
-          <div class="fw-bold fs-2">{{"DASHBOARD.LOAN_AVAILABLE" | translate}}</div>
+          <div class="fw-bold fs-2">
+            {{ "DASHBOARD.LOAN_AVAILABLE" | translate }}
+          </div>
           <div class="fs-3">{{ loanLimit() | currency: "BRL" }}</div>
           <div class="fs-7">
             Taxa de juros: {{ loanInterest() | number: "1.2-2" }}%/mês
@@ -38,6 +34,4 @@
       }
     </mat-card-content>
   </mat-card>
-
-  
 </div>
