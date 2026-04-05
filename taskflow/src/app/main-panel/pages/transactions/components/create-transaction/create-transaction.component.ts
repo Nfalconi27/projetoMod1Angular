@@ -28,35 +28,33 @@ export class CreateTransactionComponent {
   private readonly dialogRef = inject(MatDialogRef<CreateTransactionComponent>);
   private readonly dashboardService = inject(DashboardService);
   private readonly router = inject(Router);
-  readonly data = inject<Partial<Transaction>>(MAT_DIALOG_DATA, { optional: true });
+  readonly data = inject<Partial<Transaction>>(MAT_DIALOG_DATA, {
+    optional: true,
+  });
 
-
-//   ngOnInit() {
-//   if (this.data) {
-//     this.transactionForm.patchValue(this.data);
-//   }
-// }
+  //   ngOnInit() {
+  //   if (this.data) {
+  //     this.transactionForm.patchValue(this.data);
+  //   }
+  // }
 
   account$ = toSignal<Account | undefined>(this.dashboardService.getAccount(), {
     initialValue: undefined,
   });
 
   transactionForm = new FormGroup({
-    date: new FormControl(this.data?.date ?? new Date().toISOString().split('T')[0], {
-      validators: Validators.required,
-      nonNullable: true,
+    date: new FormControl(
+      this.data?.date ?? new Date().toISOString().split('T')[0],
+      {
+        validators: Validators.required,
+        nonNullable: true,
+      },
+    ),
+    description: new FormControl<string>('', {
+      validators: [Validators.minLength(3), Validators.maxLength(100)],
     }),
-    description: new FormControl(this.data?.description ?? '', {
-      validators: [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(100),
-      ],
-      nonNullable: true,
-    }),
-    amount: new FormControl(this.data?.amount ?? 0.00, {
+    amount: new FormControl<number | null>(null, {
       validators: [Validators.required],
-      nonNullable: true,
     }),
     type: new FormControl<TransactionTypes | null>(this.data?.type ?? null, {
       validators: Validators.required,
@@ -73,14 +71,24 @@ export class CreateTransactionComponent {
       this.errorMessage.set(null);
 
       const formValue = this.transactionForm.getRawValue();
+
       const payload: Omit<Transaction, 'id'> = {
-        ...formValue,
-        amount:
-          formValue.type === TransactionTypes.EXPENSE
-            ? -Math.abs(formValue.amount)
-            : Math.abs(formValue.amount),
+        date: formValue.date,
         type: formValue.type!,
+        amount: formValue.type === TransactionTypes.EXPENSE
+            ? -Math.abs(formValue.amount!)
+            : Math.abs(formValue.amount!),
+        ...(formValue.description && { description: formValue.description }),
       };
+
+      // const payload: Omit<Transaction, 'id'> = {
+      //   ...formValue,
+      //   amount:
+      //     formValue.type === TransactionTypes.EXPENSE
+      //       ? -Math.abs(formValue.amount)
+      //       : Math.abs(formValue.amount),
+      //   type: formValue.type!,
+      // };
 
       const account = this.account$();
       if (!account) return;
@@ -89,28 +97,30 @@ export class CreateTransactionComponent {
 
       if (this.data) {
         const payload2: Transaction = {
-          id: this.data?.id!, 
+          id: this.data?.id!,
           ...payload,
         };
-        const novoSaldo2 = +account.balance - this.data?.amount! + payload2.amount
+        const novoSaldo2 =
+          +account.balance - this.data?.amount! + payload2.amount;
         this.transactionsService
-        .updateTransaction(payload2, this.data?.id!)
-        .pipe(switchMap(() => this.dashboardService.updateBalance(novoSaldo2)))
-        .subscribe({
-          next: () => {
-            alert('Transação feita com sucesso!');
-            this.transactionForm.reset();
-            this.dialogRef.close(true);
-          },
-          error: (err) => {
-            console.error(err);
-            this.errorMessage.set('Erro na operação');
-          },
-          complete: () => {
-            this.isLoading.set(false);
-          },
-        });
-        
+          .updateTransaction(payload2, this.data?.id!)
+          .pipe(
+            switchMap(() => this.dashboardService.updateBalance(novoSaldo2)),
+          )
+          .subscribe({
+            next: () => {
+              alert('Transação feita com sucesso!');
+              this.transactionForm.reset();
+              this.dialogRef.close(true);
+            },
+            error: (err) => {
+              console.error(err);
+              this.errorMessage.set('Erro na operação');
+            },
+            complete: () => {
+              this.isLoading.set(false);
+            },
+          });
       } else {
         this.transactionsService
           .createTransaction(payload)

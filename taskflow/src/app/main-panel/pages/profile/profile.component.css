@@ -2,6 +2,7 @@
   display: flex;
   gap: 24px;
   padding: 24px;
+  color: rgb(26, 54, 139)
 }
 
 .profile-card {
@@ -22,8 +23,4 @@
 .arrow {
   margin-left: auto;
   opacity: 0.6;
-}
-
-.profile-content {
-  flex: 1;
 }

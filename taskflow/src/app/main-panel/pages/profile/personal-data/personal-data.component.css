@@ -1,0 +1,15 @@
+.text-muted {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.gap-2 {
+  gap: 12px;
+}
+
+.mt-3 {
+  margin-top: 16px;
+}
+
+.my-3 {
+  margin: 16px 0;
+}

@@ -1,1 +1,21 @@
-<p>security-data works!</p>
+<div class="p-3">
+  <h3>Segurança</h3>
+
+  <p><strong>Último login:</strong> {{ security.lastLogin }}</p>
+
+  <p>
+    <strong>2FA:</strong>
+    {{ security.twoFactor ? 'Ativado' : 'Desativado' }}
+  </p>
+
+  <button mat-flat-button color="primary"  class="d-flex align-items-right text-white" (click)="toggle2FA()">
+    Alternar 2FA
+  </button>
+
+  <mat-divider class="my-3"></mat-divider>
+
+  <button mat-flat-button color="warn"  class="d-flex align-items-right text-white" (click)="changePassword()">
+    Alterar Senha
+  </button>
+</div>
+

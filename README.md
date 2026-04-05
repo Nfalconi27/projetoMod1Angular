@@ -1,5 +1,10 @@
 # projetoMod2Angular
 
+BACK: ./api -> npm run api
+FRONT: ./taskflow -> ng serve
+LOGIN: mariana@nf.com
+SENHA: mariana123
+
 ● Login: Tela de autenticação que valide credenciais e gere uma sessão segura.--> com chave fakeJwt
 ● Dashboard: Exibição do saldo atual (com opção de ocultar/mostrar) e carregamento sob demanda da fatura do cartão. ---> defer com viewport para exibir o cartão, coloquei um espaçamento para forçar que o usuário vá para a parte inferir da tela e o defer ative
 ● Transferência: Formulário que realiza uma nova transferência (POST) e atualiza o saldo da conta (PATCH). ---> requisições com HttpClient e uso de signal e toSignal para consumo e utilização das variáveis

@@ -62,21 +62,15 @@ export class TransferComponent {
       nonNullable: true,
     }),
 
-    description: new FormControl('', {
-      validators: [
-        Validators.required,
-        Validators.minLength(5),
-        Validators.maxLength(100),
-      ],
-      nonNullable: true,
+    description: new FormControl<string>('', {
+      validators: [Validators.minLength(3), Validators.maxLength(100)],
     }),
 
-    amount: new FormControl(0, {
+    amount: new FormControl<number | null>(null, {
       validators: [Validators.required],
-      nonNullable: true,
     }),
 
-    destAccount: new FormControl(0, {
+    destAccount: new FormControl<string>('', {
       validators: [Validators.required],
       nonNullable: true,
     }),
@@ -95,11 +89,23 @@ export class TransferComponent {
     if (!this.formTransfer.valid) return;
 
     const formValue = this.formTransfer.getRawValue();
-    const { destAccount, ...payload } = formValue;
-    const { type, ...payload2 } = formValue;
 
-    // payload.amount = Number(payload.amount);
-    // payload2.amount = Number(payload2.amount);
+    const payload: Omit<Transaction, 'id'> = {
+      date: formValue.date,
+      amount: formValue.amount!,
+      type: formValue.type,
+      ...(formValue.description && {description: formValue.description,})
+    };
+
+    const payload2: Omit<Transfer, 'id'> = {
+      date: formValue.date,
+      amount: formValue.amount!,
+      destAccount: formValue.destAccount,
+      ...(formValue.description && {description: formValue.description,})
+    };
+
+    // const { destAccount, ...payload } = formValue;
+    // const { type, ...payload2 } = formValue;
 
     const account = this.account$();
     if (!account) {
@@ -107,7 +113,7 @@ export class TransferComponent {
       return;
     }
 
-    const novoSaldo = account.balance - payload.amount;
+    const novoSaldo = account.balance - Number(payload.amount);
 
     if (novoSaldo < 0) {
       alert('Saldo insuficiente!');
@@ -115,8 +121,8 @@ export class TransferComponent {
     }
 
     this.isTransfering.set(true);
-    payload.amount = -Math.abs(payload.amount);
-    payload2.amount = -Math.abs(payload2.amount);
+    payload.amount = -Math.abs(Number(payload.amount));
+    payload2.amount = -Math.abs(Number(payload2.amount));
 
     this.transactionsService
       .createTransaction(payload)

@@ -5,14 +5,13 @@
     </mat-card-header>
     <mat-card-content>
       <form [formGroup]="formTransfer" (ngSubmit)="onSubmit()">
-        <!-- os atributos for e id no label e no input se relacionam entre si, permitindo que, ao clicar no label, o respectivo campo receba o foco.-->
-        <!-- o atributo formControlName do input é quem faz o realcionamento entre o campo e o formControl no arquivo .ts -->
 
         <mat-card-content>
           <div class="form-group">
-            <label for="date-field">Conta Destino</label>
+            <label for="text">Conta Destino</label>
             <input
               type="text"
+              placeholder="Digita a conta que deverá receber o valor"
               class="form-control"
               id="destAccount-field"
               formControlName="destAccount"
@@ -32,7 +31,9 @@
             <label for="amount-field">Valor</label>
             <input
               type="number"
+              placeholder="0,00"
               class="form-control"
+              step="0.01"
               id="amount-field"
               formControlName="amount"
             />
